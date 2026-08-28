@@ -1,0 +1,68 @@
+/**
+ * Design tokens — fuente de verdad para colores, tipografía y espaciado.
+ *
+ * Basado en el sistema de diseño generado en Stitch (DESIGN.md).
+ * Cualquier ajuste de color/tipografía/espaciado se hace AQUI, nunca
+ * hardcodeado dentro de un componente.
+ *
+ * Este archivo se registra como estilo global independiente en angular.json
+ * (no se importa vía @import de Sass) para que sea CSS puro, sin build step.
+ */
+
+:root {
+  /* ---------- Superficies (de más oscuro a más claro) ---------- */
+  --color-bg: #101412;             /* fondo de la app */
+  --color-surface: #181c1a;        /* superficie base */
+  --color-surface-elevated: #1c211e; /* tarjetas, modales */
+  --color-surface-hover: #272b28;  /* hover / estados activos */
+
+  /* ---------- Bordes ---------- */
+  --color-border: #3f4943;
+  --color-border-focus: #8ad6b3;
+
+  /* ---------- Texto ---------- */
+  --color-text-primary: #e0e3df;
+  --color-text-secondary: #bec9c1;
+  --color-text-muted: #89938c;
+
+  /* ---------- Marca / acento ---------- */
+  --color-primary: #8ad6b3;
+  --color-primary-hover: #a5f3ce;
+  --color-on-primary: #003826;         /* texto sobre fondo primary */
+  --color-primary-container: #1f6f52;
+  --color-on-primary-container: #a2efca;
+    --color-primary-contrast: var(--color-on-primary);
+
+
+  /* ---------- Semántica financiera ---------- */
+  --color-profit: #22c55e;
+  --color-loss: #ef4444;
+
+  /* ---------- Tipografía ---------- */
+  --font-heading: 'Hanken Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* ---------- Forma ---------- */
+  --radius-sm: 0.25rem;   /* 4px  — inputs, botones, chips */
+  --radius-md: 0.375rem;  /* 6px  — iconos contenedores */
+  --radius-lg: 0.5rem;    /* 8px  — tarjetas, modales */
+
+  /* ---------- Densidad ---------- */
+  --row-height: 40px;
+  --row-height-compact: 36px;
+  --spacing-unit: 4px;
+  
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+}
