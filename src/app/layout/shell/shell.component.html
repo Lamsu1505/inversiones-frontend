@@ -1,0 +1,35 @@
+<div class="shell">
+  <div
+    class="shell__sidebar"
+    [class.shell__sidebar--open]="sidebarOpen()"
+    >
+    <app-sidebar />
+  </div>
+
+  @if (sidebarOpen()) {
+    <button
+      type="button"
+      class="shell__scrim"
+      aria-label="Cerrar menú"
+      (click)="toggleSidebar()"
+    ></button>
+  }
+
+  <div class="shell__main">
+    <header class="shell__topbar">
+      <button
+        type="button"
+        class="shell__toggle"
+        [attr.aria-expanded]="sidebarOpen()"
+        aria-label="Abrir o cerrar menú de navegación"
+        (click)="toggleSidebar()"
+      >
+        <span > ☰ </span>
+      </button>
+    </header>
+
+    <main class="shell__content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

@@ -1,0 +1,141 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100%;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px 24px;
+}
+
+.sidebar__brand-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-primary);
+}
+
+.sidebar__brand-name {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em; /* apple-design §15: tracking negativo en texto grande */
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+
+.sidebar__nav-item:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.sidebar__nav-item--active {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  font-weight: 500;
+}
+
+.sidebar__nav-icon {
+  font-size: 0.5rem;
+}
+
+.sidebar__footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.sidebar__utility {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.sidebar__icon-btn:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+.sidebar__icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__username {
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  letter-spacing: 0.005em; /* apple-design §15: tracking levemente positivo en texto chico */
+}
+
+.sidebar__logout {
+  background: none;
+  border: none;
+  color: var(--color-loss);
+  font-size: 0.875rem;
+  text-align: left;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.sidebar__logout:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-contrast: more) {
+  .sidebar { border-right-width: 2px; }
+  .sidebar__nav-item--active { border: 1px solid var(--color-on-primary-container); }
+}
