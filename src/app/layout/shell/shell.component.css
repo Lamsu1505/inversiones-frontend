@@ -10,7 +10,6 @@
 
 .shell__scrim {
   display: none;
-  background: red;
 }
 
 .shell__main {
@@ -51,7 +50,10 @@
 
   .shell__sidebar {
     position: fixed;
-    inset: 0 25% 0 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: max-content;
     z-index: 20;
     transform: translateX(-100%);
     transition: transform 200ms ease-out;
