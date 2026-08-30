@@ -1,6 +1,6 @@
 // core/services/dashboard-filter.service.ts
 import { Injectable, signal } from '@angular/core';
-import { DashboardFilter } from '../models/dashboard-filter.model';
+import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
 
 export type PeriodPreset =
   | 'hoy'

@@ -1,20 +1,19 @@
+// core/repositories/investments.repository.ts
 import { Observable } from 'rxjs';
-import { Investment } from '../models/investment.model';
-import { DailyRecord, DailyStats } from '../models/daily-record.model';
-import { DashboardFilter } from '../models/dashboard-filter.model';
-import { DashboardSummary } from '../models/dashboard-summary.model';
+import { Investment } from '../models/investment/investment.model';
+import { DailyRecord, DailyStats } from '../models/investment/daily-record.model';
+import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
+import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
+import { InvestmentSummary } from '../models/investment/investment-summary.model';
 
 export abstract class InvestmentsRepository {
-  /** Lista todas las inversiones (activas e inactivas). */
   abstract list(): Observable<Investment[]>;
-
-  /** Registros diarios de una inversión, ya con métricas calculadas (ver v_daily_stats). */
   abstract records(id: number, from: string, to: string): Observable<DailyStats[]>;
-
-  /** Guarda uno o varios registros diarios. UPSERT por (investmentId, fecha). */
   abstract saveRecords(records: DailyRecord[]): Observable<void>;
+  abstract dashboardSummary(filter: DashboardFilter): Observable<DashboardSummary>;
+  abstract investmentSummary(investmentId: number): Observable<InvestmentSummary>;
 
-
-    abstract dashboardSummary(filter: DashboardFilter): Observable<DashboardSummary>;
-
+  /** Resúmenes de todas las inversiones en una sola llamada — usado por la página
+   *  de listado para poder ordenar por Saldo/Rentabilidad sin N peticiones. */
+  abstract investmentSummaries(): Observable<InvestmentSummary[]>;
 }

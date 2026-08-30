@@ -5,7 +5,7 @@ export interface DailyRecord {
   id?: number;
   investmentId: number;
   fecha: string;
-  valorUnidad?: number;
+  valorUnidad: number;
   cantidadUnidades?: number;
   saldoDisponible: number;
   saldoTotal: number;

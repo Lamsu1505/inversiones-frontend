@@ -4,13 +4,14 @@ import { PeriodFilterComponent } from '../../shared/components/period-filter/per
 import { KpiCardComponent } from './components/kpi-card/kpi-card.component';
 import { DashboardFilterService } from '../../core/services/dashboard-filter.service';
 import { InvestmentsRepository } from '../../core/repositories/investments.repository';
-import { DashboardSummary } from '../../core/models/dashboard-summary.model';
+import { DashboardSummary } from '../../core/models/dashboard/dashboard-summary.model';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { InvestmentCardComponent } from '../investments/card/investment-card.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [PeriodFilterComponent, KpiCardComponent],
+  imports: [PeriodFilterComponent, KpiCardComponent, InvestmentCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

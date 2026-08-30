@@ -1,0 +1,55 @@
+<header class="investments__header">
+  <h1 class="investments__title">Mis Inversiones</h1>
+  <button type="button" class="investments__new-btn" (click)="createInvestment()">
+    <app-icon name="plus" [size]="16" /> Nueva Inversión
+  </button>
+</header>
+
+<div class="investments__controls">
+  <div class="investments__search">
+    <app-icon name="info" [size]="16" />
+    <input
+      type="search"
+      placeholder="Buscar inversión o entidad..."
+      [value]="searchQuery()"
+      (input)="onSearchInput($event)"
+    />
+  </div>
+
+  <div class="investments__tabs" role="group" aria-label="Filtrar por estado">
+    <button type="button" [class.investments__tab--active]="statusFilter() === 'activas'" (click)="setStatusFilter('activas')">
+      Activas <span class="investments__tab-count">{{ activeCount() }}</span>
+    </button>
+    <button type="button" [class.investments__tab--active]="statusFilter() === 'inactivas'" (click)="setStatusFilter('inactivas')">
+      Inactivas <span class="investments__tab-count">{{ inactiveCount() }}</span>
+    </button>
+    <button type="button" [class.investments__tab--active]="statusFilter() === 'todas'" (click)="setStatusFilter('todas')">
+      Todas <span class="investments__tab-count">{{ totalCount() }}</span>
+    </button>
+  </div>
+
+  <select class="investments__sort" [value]="sortBy()" (change)="onSortChange($event)">
+    <option value="nombre">Ordenar por: Nombre</option>
+    <option value="saldo">Ordenar por: Saldo</option>
+    <option value="rentabilidad">Ordenar por: Rentabilidad</option>
+    <option value="actualizacion">Ordenar por: Última actualización</option>
+  </select>
+</div>
+
+<div class="investments__grid">
+  @for (inv of visibleInvestments(); track inv.id) {
+    @if (summaryFor(inv.id); as summary) {
+      <app-investment-card [investment]="inv" [summary]="summary" />
+    }
+  }
+
+  <button type="button" class="investments__ghost-card" (click)="createInvestment()">
+    <span class="investments__ghost-icon"><app-icon name="plus" [size]="20" /></span>
+    <span class="investments__ghost-title">Registrar Inversión</span>
+    <span class="investments__ghost-subtitle">Añade un nuevo producto a tu portafolio</span>
+  </button>
+</div>
+
+@if (visibleInvestments().length === 0) {
+  <p class="investments__empty">No se encontraron inversiones con ese criterio.</p>
+}

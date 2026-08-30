@@ -1,0 +1,79 @@
+<article class="investment-card">
+  <header class="investment-card__header">
+    <div>
+      <h3 class="investment-card__name">{{ investment().nombre }}</h3>
+      <p class="investment-card__meta">
+        @if (tipoLabel()) { {{ tipoLabel() }} · }
+        {{ investment().entidad }}
+      </p>
+    </div>
+    <span
+      class="investment-card__badge"
+      [class.investment-card__badge--inactive]="!investment().activa"
+    >
+      <span class="investment-card__badge-dot" aria-hidden="true"></span>
+      {{ investment().activa ? 'Activa' : 'Inactiva' }}
+    </span>
+  </header>
+
+  <p
+    class="investment-card__updated"
+    [class.investment-card__updated--stale]="isStale()"
+    [title]="isStale() ? 'Han pasado más de 2 días desde el último registro' : ''"
+  >
+    <app-icon [name]="isStale() ? 'info' : 'history'" [size]="14" />
+    Actualizado: {{ summary()?.fechaUltimoRegistro | relativeDateCo }}
+  </p>
+
+  <div class="investment-card__hero">
+    <span class="investment-card__label">Saldo Total</span>
+    <span class="investment-card__saldo-total">{{ summary().saldoTotal | currencyCo }}</span>
+  </div>
+
+  <div class="investment-card__row investment-card__row--level2">
+    <div>
+      <span class="investment-card__label">Saldo Disponible</span>
+      <span class="investment-card__value">{{ summary()?.saldoDisponible ?? 0 | currencyCo }}</span>
+    </div>
+    <div>
+      <span class="investment-card__label">Ganancia del Mes</span>
+      <span
+        class="investment-card__value"
+        [class.investment-card__value--profit]="(summary()?.gananciaMes ?? 0) >= 0"
+        [class.investment-card__value--loss]="(summary()?.gananciaMes ?? 0) < 0"
+      >
+        <app-icon [name]="(summary()?.gananciaMes ?? 0) >= 0 ? 'arrow-up' : 'arrow-down'" [size]="12" />
+        {{ summary()?.gananciaMes ?? 0 | currencyCo:true }}
+      </span>
+    </div>
+  </div>
+
+  <div class="investment-card__row investment-card__row--level3">
+    <div>
+      <span class="investment-card__label">Promedio Rentabilidad Diaria</span>
+      <span class="investment-card__value">{{ summary()?.promedioRentabilidadDiaria ?? 0 | currencyCo }}</span>
+    </div>
+    <div>
+      <span class="investment-card__label">Aportes/Retiros Netos</span>
+      <span class="investment-card__value">{{ summary()?.aportesRetirosNetos ?? 0 | currencyCo }}</span>
+    </div>
+  </div>
+
+  <p class="investment-card__row--level4">
+    Tasa de Rentabilidad Mensual: {{ summary()?.tasaMensual ?? 0 | percentCo }}
+    <span class="investment-card__separator">·</span>
+    Tasa EA: {{ summary()?.tasaEA ?? 0 | percentCo }}
+  </p>
+
+  <app-sparkline [values]="sparklineValues()" [tone]="sparklineTone()" />
+
+  <footer class="investment-card__actions">
+    <button type="button" class="investment-card__btn investment-card__btn--primary">
+      <app-icon name="plus" [size]="14" /> Añadir Día
+    </button>
+    <button type="button" class="investment-card__btn">Histórico</button>
+    <button type="button" class="investment-card__btn investment-card__btn--icon" aria-label="Más acciones">
+      <app-icon name="more-vertical" [size]="16" />
+    </button>
+  </footer>
+</article>

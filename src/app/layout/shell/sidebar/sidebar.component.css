@@ -74,8 +74,8 @@
 
 .sidebar__utility {
   display: flex;
-  gap: 8px;
   justify-content: center;
+  gap: 10px;
 }
 
 .sidebar__icon-btn {

@@ -1,17 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { InvestmentsRepository } from './investments.repository';
-import { Investment } from '../models/investment.model';
-import { DailyRecord, DailyStats } from '../models/daily-record.model';
-import { DashboardFilter } from '../models/dashboard-filter.model';
-import { DashboardSummary } from '../models/dashboard-summary.model';
+import { Investment } from '../models/investment/investment.model';
+import { DailyRecord, DailyStats } from '../models/investment/daily-record.model';
+import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
+import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
+import { InvestmentSummary } from '../models/investment/investment-summary.model';
+import { InvestmentTipo } from '../models/investment/investment-tipo.model';
+
 
 @Injectable()
 export class MockInvestmentsRepository implements InvestmentsRepository {
-  // TODO(datos-reales): reemplazar por filas reales del Excel (Fiducuenta/InvesBot)
   private readonly investments: Investment[] = [
-    { id: 1, nombre: 'Fiducuenta', entidad: 'Banco', tipo: 'fondo', moneda: 'COP', activa: true, fechaCreacion: '2023-01-01' },
-    { id: 2, nombre: 'InvesBot', entidad: 'InvesBot', tipo: 'roboadvisor', moneda: 'USD', activa: true, fechaCreacion: '2023-01-01' },
+    {
+      id: 1,
+      nombre: 'Fiducuenta',
+      entidad: 'Bancolombia',
+      tipo: 'fondo-inversion',
+      moneda: 'COP',
+      activa: true,
+      fechaCreacion: '2023-01-01',
+    },
+    {
+      id: 2,
+      nombre: 'CDT Bancolombia',
+      entidad: 'Bancolombia',
+      tipo: 'cdt',
+      moneda: 'COP',
+      activa: true,
+      fechaCreacion: '2023-01-01',
+    },
   ];
 
   list(): Observable<Investment[]> {
@@ -27,13 +45,55 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
   }
 
   dashboardSummary(_filter: DashboardFilter): Observable<DashboardSummary> {
-    // Sin inversiones cargadas, el resultado honesto es cero en todo —
-    // no un dato inventado, sino la suma real de un conjunto vacío.
     return of({
-      valorTotal: 123879980,
-      gananciaPeriodo: 2454098,
-      promedioDiario: 49876,
-      eaPonderada: 11.75,
+      valorTotal: 0,
+      gananciaPeriodo: 0,
+      promedioDiario: 0,
+      eaPonderada: 0,
     });
   }
+
+  investmentSummaries(): Observable<InvestmentSummary[]> {
+  return of(
+    this.investments.map((inv) => ({
+      investmentId: inv.id,
+      saldoTotal: 0,
+      saldoDisponible: 0,
+      gananciaMes: 0,
+      promedioRentabilidadDiaria: 0,
+      aportesRetirosNetos: 0,
+      tasaMensual: 0,
+      tasaEA: 0,
+      fechaUltimoRegistro: null,
+    }))
+    );
+  }
+
+  investmentSummary(investmentId: number): Observable<InvestmentSummary> {
+  return of(
+    this.investments
+      .map((inv) => ({ 
+        investmentId: inv.id,
+        saldoTotal: 0,
+        saldoDisponible: 0,
+        gananciaMes: 0,
+        promedioRentabilidadDiaria: 0,
+        aportesRetirosNetos: 0,
+        tasaMensual: 0,
+        tasaEA: 0,
+        fechaUltimoRegistro: null 
+      }))
+      .find((s) => s.investmentId === investmentId) ?? {
+      investmentId,
+      saldoTotal: 0,
+      saldoDisponible: 0,
+      gananciaMes: 0,
+      promedioRentabilidadDiaria: 0,
+      aportesRetirosNetos: 0,
+      tasaMensual: 0,
+      tasaEA: 0,
+      fechaUltimoRegistro: null,
+    }
+  );
+}
 }

@@ -12,6 +12,10 @@ export type IconName =
   | 'user'
   | 'settings'
   | 'info'
+  | 'plus' 
+  | 'arrow-up' 
+  | 'arrow-down' 
+  | 'more-vertical';
   ;
 
 @Component({

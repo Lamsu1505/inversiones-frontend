@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DashboardFilterService, PeriodPreset } from '../../../core/services/dashboard-filter.service';
 import { InvestmentsRepository } from '../../../core/repositories/investments.repository';
-import { Investment } from '../../../core/models/investment.model';
+import { Investment } from '../../../core/models/investment/investment.model';
 
 interface PresetOption {
   value: PeriodPreset;
