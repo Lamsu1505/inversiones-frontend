@@ -8,6 +8,7 @@
   background: var(--color-surface);
   padding: 10px 30px 10px 20px;
   border-radius: var(--radius-md);
+  border: 2px solid var(--color-border);
 }
 
 .period-filter__presets {

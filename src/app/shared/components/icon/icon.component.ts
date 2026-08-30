@@ -9,7 +9,10 @@ export type IconName =
   | 'eye-off'
   | 'moon'
   | 'sun'
-  | 'user';
+  | 'user'
+  | 'settings'
+  | 'info'
+  ;
 
 @Component({
   selector: 'app-icon',

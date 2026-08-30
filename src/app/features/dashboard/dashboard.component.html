@@ -1,1 +1,22 @@
+<!-- dashboard.component.html -->
 <app-period-filter />
+
+<div class="dashboard__kpis">
+  <app-kpi-card
+    label="Valor Total"
+    [value]="formattedValorTotal()"
+  />
+  <app-kpi-card
+    label="Ganancia del Período"
+    [value]="formattedGanancia()"
+    [tone]="(summary()?.gananciaPeriodo ?? 0) >= 0 ? 'profit' : 'loss'"
+  />
+  <app-kpi-card
+    label="Promedio Diario"
+    [value]="formattedPromedioDiario()"
+  />
+  <app-kpi-card
+    label="Tasa EA (Ponderada)"
+    [value]="formattedEa()" 
+  />
+</div>

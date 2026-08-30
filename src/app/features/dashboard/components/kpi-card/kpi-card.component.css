@@ -1,0 +1,48 @@
+/* kpi-card.component.css */
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.kpi-card__icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-card__label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em; /* apple-design §15: tracking positivo en texto chico/label */
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.kpi-card__value {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em; /* apple-design §15: tracking negativo en texto grande */
+  font-variant-numeric: tabular-nums; /* spec sección 14: alinear dígitos */
+  color: var(--color-text-primary);
+}
+
+.kpi-card__value--profit {
+  color: var(--color-profit);
+}
+
+.kpi-card__value--loss {
+  color: var(--color-loss);
+}
+
+.kpi-card__subtitle {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}

@@ -8,4 +8,5 @@ export interface Investment {
   tipo?: string;
   moneda: string;
   activa: boolean;
+  fechaCreacion: string;
 }

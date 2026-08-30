@@ -1,6 +1,8 @@
 import { Observable } from 'rxjs';
 import { Investment } from '../models/investment.model';
 import { DailyRecord, DailyStats } from '../models/daily-record.model';
+import { DashboardFilter } from '../models/dashboard-filter.model';
+import { DashboardSummary } from '../models/dashboard-summary.model';
 
 export abstract class InvestmentsRepository {
   /** Lista todas las inversiones (activas e inactivas). */
@@ -11,4 +13,8 @@ export abstract class InvestmentsRepository {
 
   /** Guarda uno o varios registros diarios. UPSERT por (investmentId, fecha). */
   abstract saveRecords(records: DailyRecord[]): Observable<void>;
+
+
+    abstract dashboardSummary(filter: DashboardFilter): Observable<DashboardSummary>;
+
 }
