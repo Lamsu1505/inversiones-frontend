@@ -1,20 +1,61 @@
 /**
  * Design tokens — fuente de verdad para colores, tipografía y espaciado.
  *
- * Basado en el sistema de diseño generado en Stitch (DESIGN.md).
- * Cualquier ajuste de color/tipografía/espaciado se hace AQUI, nunca
- * hardcodeado dentro de un componente.
- *
- * Este archivo se registra como estilo global independiente en angular.json
- * (no se importa vía @import de Sass) para que sea CSS puro, sin build step.
+ * TEMA: los valores en :root son el tema CLARO (default).
+ * El tema OSCURO vive en [data-theme='dark'], aplicado sobre <html>
+ * por ThemeService (y por el script inline de index.html antes del paint).
  */
 
 :root {
-  /* ---------- Superficies (de más oscuro a más claro) ---------- */
-  --color-bg: #101412;             /* fondo de la app */
-  --color-surface: #181c1a;        /* superficie base */
-  --color-surface-elevated: #1c211e; /* tarjetas, modales */
-  --color-surface-hover: #272b28;  /* hover / estados activos */
+  /* ---------- Superficies (tema claro) ---------- */
+  --color-bg: #f6f9f7;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-hover: #e9efeb;
+
+  /* ---------- Bordes ---------- */
+  --color-border: #d2dcd6;
+  --color-border-focus: #1f6f52;
+
+  /* ---------- Texto ---------- */
+  --color-text-primary: #131714;
+  --color-text-secondary: #3f4943;
+  --color-text-muted: #6b756e;
+
+  /* ---------- Marca / acento ---------- */
+  --color-primary: #1f6f52;
+  --color-primary-hover: #17583f;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #a2efca;
+  --color-on-primary-container: #00281a;
+  --color-primary-contrast: var(--color-on-primary);
+
+  /* ---------- Semántica financiera ---------- */
+  /* Tonos más oscuros que en dark mode: #22c55e sobre blanco no pasa contraste AA */
+  --color-profit: #15803d;
+  --color-loss: #dc2626;
+
+  /* ---------- Tipografía ---------- */
+  --font-heading: 'Hanken Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* ---------- Forma ---------- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+
+  /* ---------- Densidad ---------- */
+  --row-height: 40px;
+  --row-height-compact: 36px;
+  --spacing-unit: 4px;
+}
+
+[data-theme='dark'] {
+  /* ---------- Superficies (tema oscuro — tus valores actuales) ---------- */
+  --color-bg: #101412;
+  --color-surface: #181c1a;
+  --color-surface-elevated: #1c211e;
+  --color-surface-hover: #272b28;
 
   /* ---------- Bordes ---------- */
   --color-border: #3f4943;
@@ -28,30 +69,13 @@
   /* ---------- Marca / acento ---------- */
   --color-primary: #8ad6b3;
   --color-primary-hover: #a5f3ce;
-  --color-on-primary: #003826;         /* texto sobre fondo primary */
+  --color-on-primary: #003826;
   --color-primary-container: #1f6f52;
   --color-on-primary-container: #a2efca;
-    --color-primary-contrast: var(--color-on-primary);
-
 
   /* ---------- Semántica financiera ---------- */
   --color-profit: #22c55e;
   --color-loss: #ef4444;
-
-  /* ---------- Tipografía ---------- */
-  --font-heading: 'Hanken Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
-
-  /* ---------- Forma ---------- */
-  --radius-sm: 0.25rem;   /* 4px  — inputs, botones, chips */
-  --radius-md: 0.375rem;  /* 6px  — iconos contenedores */
-  --radius-lg: 0.5rem;    /* 8px  — tarjetas, modales */
-
-  /* ---------- Densidad ---------- */
-  --row-height: 40px;
-  --row-height-compact: 36px;
-  --spacing-unit: 4px;
-  
 }
 
 * {
@@ -65,4 +89,13 @@ html, body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: var(--font-body);
+}
+
+/* apple-design §14: los cambios de tema no deben ser saltos bruscos de brillo. */
+html {
+  transition: background-color 240ms ease, color 240ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { transition: none; }
 }

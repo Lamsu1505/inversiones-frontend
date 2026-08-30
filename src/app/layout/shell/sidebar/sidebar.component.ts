@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IconName, IconComponent } from '../../../shared/components/icon/icon.component';
+import { ThemeService } from '../../../core/services/theme.service';
 
 interface NavItem {
   label: string;
@@ -38,5 +39,13 @@ export class SidebarComponent {
     // core/services/auth.service.ts (ver Especs.md sección 13).
     console.log('Logout stub — pendiente de AuthService');
     this.router.navigateByUrl('/login');
+  }
+
+
+  protected readonly themeService = inject(ThemeService);
+
+  protected toggleTheme(): void {
+    console.log('SidebarComponent.toggleTheme()');
+    this.themeService.toggle();
   }
 }

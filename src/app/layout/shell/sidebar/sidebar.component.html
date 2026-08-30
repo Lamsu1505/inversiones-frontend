@@ -45,13 +45,12 @@
       <button
         type="button"
         class="sidebar__icon-btn"
-        title="Tema oscuro fijo — no configurable"
-        aria-label="Tema oscuro fijo"
-      >
-        <span aria-hidden="true">
-          <app-icon [name]="'sun'" [size]="20" />
-        </span>
-      </button>
+        [attr.aria-pressed]="themeService.theme() === 'dark'"
+        [attr.aria-label]="themeService.theme() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+        (click)="toggleTheme()"
+          >
+          <app-icon [name]="themeService.theme() === 'dark' ? 'sun' : 'moon'" [size]="16" />
+        </button>
     </div>
 
     <div class="sidebar__user">
