@@ -1,0 +1,11 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit; /* deja pasar el currentColor del contenedor padre */
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}

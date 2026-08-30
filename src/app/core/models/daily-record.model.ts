@@ -4,7 +4,7 @@
 export interface DailyRecord {
   id?: number;
   investmentId: number;
-  fecha: string;              // formato 'YYYY-MM-DD'
+  fecha: string;
   valorUnidad?: number;
   cantidadUnidades?: number;
   saldoDisponible: number;

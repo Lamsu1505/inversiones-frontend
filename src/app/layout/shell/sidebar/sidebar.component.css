@@ -75,6 +75,7 @@
 .sidebar__utility {
   display: flex;
   gap: 8px;
+  justify-content: center;
 }
 
 .sidebar__icon-btn {
@@ -91,6 +92,7 @@
 }
 
 .sidebar__icon-btn:hover:not(:disabled) {
+  color: var(--color-text-primary);
   background: var(--color-surface-hover);
 }
 
@@ -110,6 +112,7 @@
   height: 32px;
   border-radius: 50%;
   background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
   display: flex;
   align-items: center;
   justify-content: center;

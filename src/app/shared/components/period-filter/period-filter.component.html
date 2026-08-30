@@ -1,0 +1,35 @@
+<div class="period-filter">
+  <div class="period-filter__presets" role="group" aria-label="Filtrar por período">
+    @for (preset of presets; track preset.value) {
+      <button
+        type="button"
+        class="period-filter__preset-btn"
+        [class.period-filter__preset-btn--active]="filterService.activePreset() === preset.value"
+        (click)="selectPreset(preset.value)"
+      >
+        {{ preset.label }}
+      </button>
+    }
+
+    <button
+      type="button"
+      class="period-filter__preset-btn"
+      [class.period-filter__preset-btn--active]="filterService.activePreset() === 'personalizado'"
+      title="Selector de fechas"
+      (click)="selectPreset('personalizado')"
+      >
+      Personalizado
+    </button>
+  </div>
+
+  <select
+    class="period-filter__select"
+    [value]="filterService.filter().investmentId ?? 'all'"
+    (change)="onInvestmentChange($event)"
+  >
+    <option value="all">{{ allInvestmentsLabel() }}</option>
+    @for (investment of investments(); track investment.id) {
+      <option [value]="investment.id">{{ investment.nombre }}</option>
+    }
+  </select>
+</div>

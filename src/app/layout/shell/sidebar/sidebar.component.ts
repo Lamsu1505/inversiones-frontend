@@ -1,30 +1,30 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { IconName, IconComponent } from '../../../shared/components/icon/icon.component';
+
 interface NavItem {
   label: string;
   route: string;
-  icon: string; // nombre lógico, usado solo para el switch del template
+  icon: IconName;
 }
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, IconComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  // Config declarativa de la navegación. Si mañana agregan una pantalla,
-  // se agrega un objeto aquí — no se toca el template.
+  
   protected readonly navItems: NavItem[] = [
     { label: 'Estadísticas', route: '/dashboard', icon: 'chart' },
     { label: 'Mis Inversiones', route: '/investments', icon: 'trending' },
     { label: 'Histórico', route: '/history', icon: 'history' },
+    { label: 'Reportes', route: '/reports', icon: 'report' },
   ];
 
   // Placeholder de "ocultar saldos" — sin efecto real todavía.
-  // Cuando se construya la feature de privacidad, esto se sube a un
-  // servicio compartido para que otros componentes (KPIs, tabla) lo lean.
   protected readonly balancesHidden = signal(false);
 
   private readonly router = inject(Router);
