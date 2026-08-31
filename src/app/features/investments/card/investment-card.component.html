@@ -7,19 +7,19 @@
         {{ investment().entidad }}
       </p>
       <p class="investment-card__ea">
-        <span class="investment-card__ea-label">Tasa EA</span>
-        <span class="investment-card__ea-value">{{ summary().tasaEA | percentCo }}</span>
+        <span class="investment-card__ea-value">{{ summary().tasaEA | percentCo }} EA</span>
+        <span class="investment-card__ea-label">Este mes</span>
       </p>
     </div>
 
     <div class="investment-card__header-actions">
-      <span
+      <!-- <span
         class="investment-card__badge"
         [class.investment-card__badge--inactive]="!investment().activa"
       >
         <span class="investment-card__badge-dot" aria-hidden="true"></span>
         {{ investment().activa ? 'Activa' : 'Inactiva' }}
-      </span>
+      </span> -->
       <button type="button" class="investment-card__menu-btn" aria-label="Más acciones">
         <app-icon name="more-vertical" [size]="16" />
       </button>

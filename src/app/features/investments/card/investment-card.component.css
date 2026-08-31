@@ -36,11 +36,11 @@
   }
 
   .investment-card__name {
-    font-size: 1.0625rem; /* el título baja un escalón para reducir la chance de partirse en 2 líneas */
+    font-size: 1.125rem; 
   }
-
+  
   .investment-card__saldo-total {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .investment-card__footer {
@@ -219,8 +219,8 @@
 
 .investment-card__saldo-total {
   font-family: var(--font-heading);
-  font-size: 1.55rem;
-  font-weight: 550;
+  font-size: 1.3rem;
+  font-weight: 600;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   color: var(--color-text-primary);
@@ -236,7 +236,7 @@
   align-items: center;
   gap: 4px;
   font-family: var(--font-heading);
-  font-size: 1.375rem;
+  font-size: 1.3rem;
   font-weight: 600;
 }
 
