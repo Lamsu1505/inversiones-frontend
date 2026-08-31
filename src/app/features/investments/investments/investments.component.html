@@ -7,7 +7,7 @@
 
 <div class="investments__controls">
   <div class="investments__search">
-    <app-icon name="info" [size]="16" />
+    <app-icon name="search" [size]="18" />
     <input
       type="search"
       placeholder="Buscar inversión o entidad..."
@@ -42,7 +42,6 @@
       <app-investment-card [investment]="inv" [summary]="summary" />
     }
   }
-
   <button type="button" class="investments__ghost-card" (click)="createInvestment()">
     <span class="investments__ghost-icon"><app-icon name="plus" [size]="20" /></span>
     <span class="investments__ghost-title">Registrar Inversión</span>

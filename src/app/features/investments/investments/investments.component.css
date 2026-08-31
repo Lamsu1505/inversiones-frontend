@@ -7,7 +7,7 @@
 
 .investments__title {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   color: var(--color-text-primary);
 }
@@ -101,8 +101,8 @@
 
 .investments__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 24px;
 }
 
 .investments__ghost-card {
@@ -111,13 +111,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 32px;
+  padding: 15px;
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-lg);
-  background: transparent;
+  background: var(--color-surface);
   color: var(--color-text-secondary);
   cursor: pointer;
-  min-height: 200px;
+  min-height: 120px;
 }
 
 .investments__ghost-icon {

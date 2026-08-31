@@ -211,7 +211,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Por ahora solo simulamos la espera para validar el flujo de UI.
     setTimeout(() => {
       this.loading.set(false);
-      this.router.navigateByUrl('/dashboard'); // ← esto es lo nuevo
+      this.router.navigateByUrl('/investments'); // ← esto es lo nuevo
     }, 800);
   }
 

@@ -13,8 +13,8 @@ export const routes: Routes = [
     component: ShellComponent,
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'investments', loadComponent: () => import('./features/investments/investments/investments.component').then(m => m.InvestmentsComponent) },
+      { path: '', redirectTo: 'investments', pathMatch: 'full' },
     ],
   },
 ];

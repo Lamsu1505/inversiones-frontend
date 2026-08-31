@@ -19,8 +19,8 @@ interface NavItem {
 export class SidebarComponent {
   
   protected readonly navItems: NavItem[] = [
-    { label: 'Estadísticas', route: '/dashboard', icon: 'chart' },
     { label: 'Mis Inversiones', route: '/investments', icon: 'trending' },
+    { label: 'Estadísticas', route: '/dashboard', icon: 'chart' },
     { label: 'Histórico', route: '/history', icon: 'history' },
     { label: 'Reportes', route: '/reports', icon: 'report' },
   ];

@@ -15,7 +15,8 @@ export type IconName =
   | 'plus' 
   | 'arrow-up' 
   | 'arrow-down' 
-  | 'more-vertical';
+  | 'more-vertical'
+  | 'search'
   ;
 
 @Component({

@@ -14,8 +14,8 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
   private readonly investments: Investment[] = [
     {
       id: 1,
-      nombre: 'Fiducuenta',
-      entidad: 'Bancolombia',
+      nombre: 'Fiducuenta para personas como yo ',
+      entidad: 'Bancolombia banco de colomnbiadadf',
       tipo: 'fondo-inversion',
       moneda: 'COP',
       activa: true,
@@ -26,6 +26,15 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
       nombre: 'CDT Bancolombia',
       entidad: 'Bancolombia',
       tipo: 'cdt',
+      moneda: 'COP',
+      activa: true,
+      fechaCreacion: '2023-01-01',
+    },
+    {
+      id: 3,
+      nombre: 'Acciones de Ecopetrol',
+      entidad: 'BVC',
+      tipo: 'acciones',
       moneda: 'COP',
       activa: true,
       fechaCreacion: '2023-01-01',
@@ -57,13 +66,13 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
   return of(
     this.investments.map((inv) => ({
       investmentId: inv.id,
-      saldoTotal: 0,
-      saldoDisponible: 0,
-      gananciaMes: 0,
-      promedioRentabilidadDiaria: 0,
-      aportesRetirosNetos: 0,
-      tasaMensual: 0,
-      tasaEA: 0,
+      saldoTotal: 114989765,
+      saldoDisponible: 110678654,
+      gananciaMes: 450987,
+      promedioRentabilidadDiaria: 20675,
+      aportesRetirosNetos: 12309776,
+      tasaMensual: 1.23,
+      tasaEA: 17.56,
       fechaUltimoRegistro: null,
     }))
     );
