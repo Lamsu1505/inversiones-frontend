@@ -4,7 +4,6 @@
   display: block;
   padding: 24px;
   font-variant-numeric: tabular-nums;
-  /* sin height, sin flex, sin overflow: hidden */
 }
 
 /* ── Encabezado ─────────────────────────────────────────────────────────── */
@@ -15,8 +14,6 @@
   top: 0;
   z-index: 10;
   background-color: var(--color-bg);
-  /* el fondo es necesario: sin esto, el contenido que scrollea
-     por debajo se ve "a través" del header al quedar pegado */
   padding-top: 4px;
   padding-bottom: 4px;
 }
@@ -182,8 +179,6 @@
   cursor: pointer;
 }
 
-/* El radio real queda accesible al teclado y a los lectores de pantalla,
-   pero invisible: el estilo lo lleva el <span> hermano. */
 .calculator__segment input {
   position: absolute;
   width: 1px;
@@ -242,8 +237,6 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
-  /* sin max-height, sin overflow-y, sin padding-right —
-     ya no es un contenedor de scroll propio */
 }
 
 .calculator__hero {
