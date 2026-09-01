@@ -1,0 +1,273 @@
+  <header class="calculator__header">
+    <h1 class="calculator__title">
+      Calculadora de rentabilidad
+    </h1>
+    <p class="calculator__subtitle">
+      Proyecta el crecimiento de una inversión con aportes mensuales e interés compuesto.
+    </p>
+  </header>
+
+  <div class="calculator__layout">
+    <!-- ── Panel de entradas ────────────────────────────────────────────── -->
+    <form class="calculator__panel" [formGroup]="form">
+      <h2 class="calculator__panel-title">Supuestos</h2>
+
+      <div class="calculator__field">
+        <label class="calculator__label" for="montoInicial">Monto inicial</label>
+        <div class="calculator__input-wrap">
+          <span class="calculator__affix" aria-hidden="true">$</span>
+          <input
+          id="montoInicial"
+          class="calculator__input"
+          type="text"
+          inputmode="numeric"
+          formControlName="montoInicial"
+          appCurrencyMask
+          />
+        </div>
+      </div>
+
+      <div class="calculator__field">
+        <label class="calculator__label" for="aporteMensual">Aporte mensual</label>
+        <div class="calculator__input-wrap">
+          <span class="calculator__affix" aria-hidden="true">$</span>
+          <input
+            id="aporteMensual"
+            class="calculator__input"
+            type="text"
+            min="0"
+            step="50000"
+            inputmode="numeric"
+            formControlName="aporteMensual"
+            appCurrencyMask
+          />
+        </div>
+      </div>
+
+      <fieldset class="calculator__field calculator__field--fieldset">
+        <legend class="calculator__label">Momento del aporte</legend>
+        <div class="calculator__segmented">
+          <label class="calculator__segment">
+            <input type="radio" value="vencido" formControlName="tipoAporte" />
+            <span class="calculator__segment-label">Fin de mes</span>
+          </label>
+          <label class="calculator__segment">
+            <input type="radio" value="anticipado" formControlName="tipoAporte" />
+            <span class="calculator__segment-label">Inicio de mes</span>
+          </label>
+        </div>
+        <p class="calculator__hint">
+          Aportar al inicio del mes le da a cada cuota un mes extra de rendimiento.
+        </p>
+      </fieldset>
+
+      <div class="calculator__tasa_y_tiempo">
+        <div class="calculator__field">
+          <label class="calculator__label" for="tasaEA">Tasa efectiva anual</label>
+          <div class="calculator__input-wrap">
+            <input  
+              id="tasaEA"
+              class="calculator__input"
+              type="number"
+              min="0"
+              step="0.25"
+              inputmode="decimal"
+              formControlName="tasaEA"
+              appNoScrollChange
+            />
+            <span class="calculator__affix calculator__affix--suffix" aria-hidden="true">% E.A.</span>
+          </div>
+        </div>
+
+        <div class="calculator__field">
+          <label class="calculator__label" for="anios">Tiempo</label>
+          <div class="calculator__input-wrap">
+            <input
+              id="anios"
+              class="calculator__input"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              inputmode="decimal"
+              formControlName="anios"
+              appNoScrollChange
+            />
+            <span class="calculator__affix calculator__affix--suffix" aria-hidden="true">años</span>
+          </div>
+        </div>
+      </div>
+
+
+      <button class="calculator__reset" type="button" (click)="restablecer()">
+        Restablecer valores
+      </button>
+    </form>
+
+    <!-- ── Resultados ───────────────────────────────────────────────────── -->
+    <div class="calculator__results">
+      <div class="calculator__hero">
+        <p class="calculator__hero-label">Valor futuro</p>
+        <p class="calculator__hero-value">{{ valorFuturo() | currencyCo }}</p>
+        <p class="calculator__hero-meta">
+          Tasa efectiva mensual equivalente:
+          <strong>{{ tasaMensualPct() | percentCo: false : 4 }}</strong>
+        </p>
+      </div>
+
+      <div class="calculator__metrics">
+        <div class="calculator__metric">
+          <p class="calculator__metric-label">Capital aportado</p>
+          <p class="calculator__metric-value calculator__metric-value--capital">
+            {{ capitalAportado() | currencyCo }}
+          </p>
+        </div>
+        <div class="calculator__metric">
+          <p class="calculator__metric-label">Intereses ganados</p>
+          <p class="calculator__metric-value calculator__metric-value--interes">
+            {{ interesesGanados() | currencyCo: true }}
+          </p>
+        </div>
+        <div class="calculator__metric">
+          <p class="calculator__metric-label">Multiplicador</p>
+          <p class="calculator__metric-value">{{ multiplicadorTexto() }}</p>
+        </div>
+      </div>
+
+      @if (hayResultado()) {
+        <div class="calculator__composition">
+          <div
+            class="calculator__bar"
+            role="img"
+            [attr.aria-label]="
+              'Capital aportado ' +
+              (porcentajeCapital() | percentCo: false : 1) +
+              ', intereses ' +
+              (porcentajeIntereses() | percentCo: false : 1)
+            "
+          >
+            <div
+              class="calculator__bar-segment calculator__bar-segment--capital"
+              [style.width.%]="porcentajeCapital()"
+            ></div>
+            <div
+              class="calculator__bar-segment calculator__bar-segment--interes"
+              [style.width.%]="porcentajeIntereses()"
+            ></div>
+          </div>
+
+          <ul class="calculator__legend">
+            <li class="calculator__legend-item">
+              <span class="calculator__dot calculator__dot--capital" aria-hidden="true"></span>
+              Capital aportado
+              <span class="calculator__legend-value">
+                {{ porcentajeCapital() | percentCo: false : 1 }}
+              </span>
+            </li>
+            <li class="calculator__legend-item">
+              <span class="calculator__dot calculator__dot--interes" aria-hidden="true"></span>
+              Intereses
+              <span class="calculator__legend-value">
+                {{ porcentajeIntereses() | percentCo: false : 1 }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      }
+
+      @if (proyeccion().length > 0) {
+        <div class="calculator__table-card">
+          <h2 class="calculator__section-title">Proyección año por año</h2>
+          <div class="calculator__table-scroll">
+            <table class="calculator__table">
+              <thead>
+                <tr>
+                  <th scope="col">Año</th>
+                  <th scope="col" class="calculator__cell--num">Capital aportado</th>
+                  <th scope="col" class="calculator__cell--num">Intereses</th>
+                  <th scope="col" class="calculator__cell--num">Saldo final</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (fila of proyeccion(); track fila.anio) {
+                  <tr>
+                    <th scope="row" class="calculator__cell--year">{{ fila.anio }}</th>
+                    <td class="calculator__cell--num">{{ fila.capital | currencyCo }}</td>
+                    <td class="calculator__cell--num calculator__cell--interes">
+                      {{ fila.intereses | currencyCo }}
+                    </td>
+                    <td class="calculator__cell--num calculator__cell--total">
+                      {{ fila.saldo | currencyCo }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      } @else {
+        <p class="calculator__empty">
+          Ingresa un tiempo mayor a cero para ver la proyección.
+        </p>
+      }
+
+      <!-- ── Fórmulas ──────────────────────────────────────────────────── -->
+      <section class="calculator__formulas">
+        <h2 class="calculator__section-title">Cómo se calcula</h2>
+
+        <ol class="calculator__formula-list">
+          <li class="calculator__formula">
+            <p class="calculator__formula-caption">Tasa efectiva mensual equivalente</p>
+            <p class="calculator__formula-math">i = (1 + EA)<sup>1/12</sup> − 1</p>
+            <p class="calculator__formula-note">
+              No se divide la E.A. entre 12: eso daría una tasa nominal, no efectiva.
+            </p>
+          </li>
+          <li class="calculator__formula">
+            <p class="calculator__formula-caption">Valor futuro del monto inicial</p>
+            <p class="calculator__formula-math">VF₁ = P × (1 + i)<sup>n</sup></p>
+          </li>
+          <li class="calculator__formula">
+            <p class="calculator__formula-caption">Valor futuro de los aportes mensuales</p>
+            <p class="calculator__formula-math">
+              VF₂ = A × [ ((1 + i)<sup>n</sup> − 1) ÷ i ]
+            </p>
+            <p class="calculator__formula-note">
+              Si el aporte es anticipado, ese resultado se multiplica por (1 + i).
+            </p>
+          </li>
+          <li class="calculator__formula">
+            <p class="calculator__formula-caption">Valor futuro total</p>
+            <p class="calculator__formula-math">VF = VF₁ + VF₂</p>
+          </li>
+        </ol>
+
+        <dl class="calculator__variables">
+          <div class="calculator__variable">
+            <dt>P</dt>
+            <dd>Monto inicial</dd>
+          </div>
+          <div class="calculator__variable">
+            <dt>A</dt>
+            <dd>Aporte mensual</dd>
+          </div>
+          <div class="calculator__variable">
+            <dt>i</dt>
+            <dd>Tasa efectiva mensual</dd>
+          </div>
+          <div class="calculator__variable">
+            <dt>n</dt>
+            <dd>Número de meses (años × 12)</dd>
+          </div>
+        </dl>
+
+        <p class="calculator__disclaimer">
+          <app-icon name="info" [size]="16" />
+          <span>
+            El resultado es nominal: no descuenta inflación, impuestos ni comisiones, y
+            asume que la tasa se mantiene constante durante todo el período.
+          </span>
+        </p>
+      </section>
+    </div>
+  </div>

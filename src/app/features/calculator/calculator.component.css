@@ -1,0 +1,586 @@
+.calculator {
+  container-type: inline-size;
+  container-name: calculator;
+  display: block;
+  padding: 24px;
+  font-variant-numeric: tabular-nums;
+  /* sin height, sin flex, sin overflow: hidden */
+}
+
+/* ── Encabezado ─────────────────────────────────────────────────────────── */
+
+.calculator__header {
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--color-bg);
+  /* el fondo es necesario: sin esto, el contenido que scrollea
+     por debajo se ve "a través" del header al quedar pegado */
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.calculator__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.calculator__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  max-width: 90%;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+
+.calculator__layout {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 24px;
+}
+
+@container calculator (max-width: 720px) {
+  .calculator__layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .calculator__panel {
+    position: static;
+    top: auto;
+  }
+}
+
+/* ── Panel de entradas ──────────────────────────────────────────────────── */
+
+.calculator__panel {
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.calculator__panel-title,
+.calculator__section-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.calculator__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.calculator__field--fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.calculator__label {
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.calculator__input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s ease;
+}
+
+.calculator__input-wrap:focus-within {
+  border-color: var(--color-border-focus);
+}
+
+.calculator__affix {
+  flex: 0 0 auto;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.calculator__affix--suffix {
+  order: 1;
+}
+
+.calculator__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--row-height);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+.calculator__tasa_y_tiempo{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Oculta las flechitas del input numérico: estorban más de lo que ayudan. */
+.calculator__input::-webkit-outer-spin-button,
+.calculator__input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.calculator__input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.calculator__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+/* ── Control segmentado ─────────────────────────────────────────────────── */
+
+.calculator__segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.calculator__segment {
+  display: block;
+  cursor: pointer;
+}
+
+/* El radio real queda accesible al teclado y a los lectores de pantalla,
+   pero invisible: el estilo lo lleva el <span> hermano. */
+.calculator__segment input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.calculator__segment-label {
+  display: block;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.calculator__segment input:checked + .calculator__segment-label {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 500;
+}
+
+.calculator__segment input:focus-visible + .calculator__segment-label {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 1px;
+}
+
+.calculator__reset {
+  height: var(--row-height-compact);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.calculator__reset:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+/* ── Resultados ─────────────────────────────────────────────────────────── */
+
+.calculator__results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  /* sin max-height, sin overflow-y, sin padding-right —
+     ya no es un contenedor de scroll propio */
+}
+
+.calculator__hero {
+  padding: 24px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.calculator__hero-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.calculator__hero-value {
+  margin: 8px 0 0;
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.calculator__hero-meta {
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.calculator__hero-meta strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+@container calculator (max-width: 480px) {
+  .calculator__hero {
+    padding: 18px;
+  }
+
+  .calculator__hero-value {
+    font-size: 1.75rem;
+  }
+}
+
+/* ── Métricas ───────────────────────────────────────────────────────────── */
+
+.calculator__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.calculator__metric {
+  padding: 14px 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+}
+
+.calculator__metric-label {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.calculator__metric-value {
+  margin: 6px 0 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calculator__metric-value--capital {
+  color: var(--color-capital);
+}
+
+.calculator__metric-value--interes {
+  color: var(--color-interes);
+}
+
+/* ── Barra de composición ───────────────────────────────────────────────── */
+
+.calculator__composition {
+  padding: 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.calculator__bar {
+  display: flex;
+  height: 10px;
+  overflow: hidden;
+  background-color: var(--color-surface-hover);
+  border-radius: 999px;
+}
+
+.calculator__bar-segment {
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
+.calculator__bar-segment--capital {
+  background-color: var(--color-capital);
+}
+
+.calculator__bar-segment--interes {
+  background-color: var(--color-interes);
+}
+
+.calculator__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calculator__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.calculator__legend-value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.calculator__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.calculator__dot--capital {
+  background-color: var(--color-capital);
+}
+
+.calculator__dot--interes {
+  background-color: var(--color-interes);
+}
+
+/* ── Tabla ──────────────────────────────────────────────────────────────── */
+
+.calculator__table-card {
+  padding: 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+}
+
+.calculator__table-scroll {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.calculator__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.calculator__table th,
+.calculator__table td {
+  padding: 0 12px;
+  height: var(--row-height-compact);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.calculator__table thead th {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.calculator__table tbody tr:last-child th,
+.calculator__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.calculator__table tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.calculator__cell--num {
+  text-align: right;
+}
+
+.calculator__cell--year {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.calculator__cell--interes {
+  color: var(--color-interes);
+}
+
+.calculator__cell--total {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.calculator__empty {
+  margin: 0;
+  padding: 20px;
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* ── Fórmulas ───────────────────────────────────────────────────────────── */
+
+.calculator__formulas {
+  padding: 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.calculator__formula-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: formula;
+}
+
+.calculator__formula {
+  padding: 12px 14px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-width: 0;
+}
+
+.calculator__formula-caption {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.calculator__formula-math {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  overflow-x: auto;
+}
+
+.calculator__formula-note {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}
+
+.calculator__variables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 14px 0 0;
+}
+
+.calculator__variable {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.8125rem;
+}
+
+.calculator__variable dt {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.calculator__variable dd {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.calculator__disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.calculator__disclaimer app-icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+@container calculator (max-width: 480px) {
+  .calculator {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 650px) {
+  .calculator__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calculator__panel {
+    position: static;
+    top: auto;
+  }
+}

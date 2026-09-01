@@ -23,6 +23,7 @@ export class SidebarComponent {
     { label: 'Estadísticas', route: '/dashboard', icon: 'chart' },
     { label: 'Histórico', route: '/history', icon: 'history' },
     { label: 'Reportes', route: '/reports', icon: 'report' },
+    { label: 'Calculadora', route: '/calculator', icon: 'calculator' },
   ];
 
   // Placeholder de "ocultar saldos" — sin efecto real todavía.

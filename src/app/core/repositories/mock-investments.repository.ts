@@ -39,6 +39,24 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
       activa: true,
       fechaCreacion: '2023-01-01',
     },
+    {
+      id: 4,
+      nombre: 'Acciones de Ecopetrol',
+      entidad: 'BVC',
+      tipo: 'acciones',
+      moneda: 'COP',
+      activa: true,
+      fechaCreacion: '2023-01-01',
+    },
+    {
+      id: 5,
+      nombre: 'Acciones de Ecopetrol',
+      entidad: 'BVC',
+      tipo: 'acciones',
+      moneda: 'COP',
+      activa: true,
+      fechaCreacion: '2023-01-01',
+    },
   ];
 
   list(): Observable<Investment[]> {

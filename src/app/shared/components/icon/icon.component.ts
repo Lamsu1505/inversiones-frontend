@@ -17,6 +17,7 @@ export type IconName =
   | 'arrow-down' 
   | 'more-vertical'
   | 'search'
+  | 'calculator'
   ;
 
 @Component({

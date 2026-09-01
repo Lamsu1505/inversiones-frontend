@@ -21,6 +21,8 @@
   --color-text-primary: #131714;
   --color-text-secondary: #3f4943;
   --color-text-muted: #6b756e;
+   --color-capital: #c9753d;
+  --color-interes: var(--color-primary);
 
   /* ---------- Marca / acento ---------- */
   --color-primary: #1f6f52;
@@ -65,6 +67,8 @@
   --color-text-primary: #e0e3df;
   --color-text-secondary: #bec9c1;
   --color-text-muted: #89938c;
+  --color-capital: #d68d59;
+
 
   /* ---------- Marca / acento ---------- */
   --color-primary: #8ad6b3;
