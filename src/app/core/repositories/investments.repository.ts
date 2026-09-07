@@ -17,3 +17,4 @@ export abstract class InvestmentsRepository {
    *  de listado para poder ordenar por Saldo/Rentabilidad sin N peticiones. */
   abstract investmentSummaries(): Observable<InvestmentSummary[]>;
 }
+

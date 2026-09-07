@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
+
 import { InvestmentsRepository } from '../../../core/repositories/investments.repository';
 import { Investment } from '../../../core/models/investment/investment.model';
 import { InvestmentSummary } from '../../../core/models/investment/investment-summary.model';
 import { InvestmentCardComponent } from '../card/investment-card.component';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
+import { toUserMessage } from '../../../core/errors/error-message.util';
 
 type StatusFilter = 'activas' | 'inactivas' | 'todas';
 type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
@@ -19,24 +21,57 @@ type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
 export class InvestmentsComponent {
   private readonly repository = inject(InvestmentsRepository);
 
-  // --- Datos crudos: una sola petición de cada uno, sin importar cuántas tarjetas haya ---
-  private readonly investments = toSignal(this.repository.list(), {
-    initialValue: [] as Investment[],
+  // ── Datos remotos ─────────────────────────────────────────────────────
+
+  protected readonly investmentsRes = rxResource({
+    stream: () => this.repository.list(),
+    defaultValue: [] as Investment[],
   });
 
-  private readonly summaries = toSignal(this.repository.investmentSummaries(), {
-    initialValue: [] as InvestmentSummary[],
+  protected readonly summariesRes = rxResource({
+    stream: () => this.repository.investmentSummaries(),
+    defaultValue: [] as InvestmentSummary[],
   });
 
-  // Mapa por id para lookup O(1) al renderizar y al ordenar, en vez de
-  // recorrer el arreglo de summaries por cada inversión (que sería O(n²)).
+  private readonly investments = computed(() =>
+    this.investmentsRes.hasValue() ? this.investmentsRes.value() : [],
+  );
+
+  private readonly summaries = computed(() =>
+    this.summariesRes.hasValue() ? this.summariesRes.value() : [],
+  );
+
+  /** isLoading() y no status()==='loading': un reintento reporta 'reloading'. */
+  protected readonly isLoading = computed(() => this.investmentsRes.isLoading());
+
+  protected readonly loadError = computed(() => {
+    const error = this.investmentsRes.error();
+    return error ? toUserMessage(error) : null;
+  });
+
+  /** Aviso discreto: las tarjetas se ven, pero sin métricas. */
+  protected readonly summariesError = computed(() => {
+    const error = this.summariesRes.error();
+    return error ? toUserMessage(error) : null;
+  });
+
+  protected retryInvestments(): void {
+    this.investmentsRes.reload();
+  }
+
+  protected retrySummaries(): void {
+    this.summariesRes.reload();
+  }
+
+  // Mapa por id para lookup O(1) al renderizar y al ordenar.
   private readonly summariesById = computed(() => {
     const map = new Map<number, InvestmentSummary>();
     for (const s of this.summaries()) map.set(s.investmentId, s);
     return map;
   });
 
-  // --- Estado de la UI: filtro, búsqueda, orden ---
+  // ── Estado de la UI: filtro, búsqueda, orden ──────────────────────────
+
   protected readonly statusFilter = signal<StatusFilter>('activas');
   protected readonly searchQuery = signal('');
   protected readonly sortBy = signal<SortOption>('nombre');
@@ -63,6 +98,17 @@ export class InvestmentsComponent {
     return [...filtered].sort((a, b) => this.compare(a, b, summariesById));
   });
 
+  /**
+   * "Sin resultados por el filtro/búsqueda" — DISTINTO de "no hay ninguna
+   * inversión creada". Solo tiene sentido evaluarlo una vez que la carga
+   * terminó sin error; antes de eso, "vacío" no significa nada todavía.
+   */
+  protected readonly hasNoResults = computed(
+    () => !this.isLoading() && !this.loadError() && this.visibleInvestments().length === 0,
+  );
+
+  // ── Acciones de la UI ─────────────────────────────────────────────────
+
   protected setStatusFilter(value: StatusFilter): void {
     this.statusFilter.set(value);
   }
@@ -80,7 +126,6 @@ export class InvestmentsComponent {
   }
 
   protected createInvestment(): void {
-    // TODO(modal): reemplazar por apertura del modal de creación (Especs.md sección 16).
     console.log('Abrir modal de nueva inversión — pendiente');
   }
 
@@ -95,7 +140,7 @@ export class InvestmentsComponent {
       case 'actualizacion': {
         const fechaA = summariesById.get(a.id)?.fechaUltimoRegistro ?? '';
         const fechaB = summariesById.get(b.id)?.fechaUltimoRegistro ?? '';
-        return fechaB.localeCompare(fechaA); // más reciente primero
+        return fechaB.localeCompare(fechaA);
       }
     }
   }

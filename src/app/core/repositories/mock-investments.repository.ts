@@ -12,51 +12,6 @@ import { InvestmentTipo } from '../models/investment/investment-tipo.model';
 @Injectable()
 export class MockInvestmentsRepository implements InvestmentsRepository {
   private readonly investments: Investment[] = [
-    {
-      id: 1,
-      nombre: 'Fiducuenta para personas como yo ',
-      entidad: 'Bancolombia banco de colomnbiadadf',
-      tipo: 'fondo-inversion',
-      moneda: 'COP',
-      activa: true,
-      fechaCreacion: '2023-01-01',
-    },
-    {
-      id: 2,
-      nombre: 'CDT Bancolombia',
-      entidad: 'Bancolombia',
-      tipo: 'cdt',
-      moneda: 'COP',
-      activa: true,
-      fechaCreacion: '2023-01-01',
-    },
-    {
-      id: 3,
-      nombre: 'Acciones de Ecopetrol',
-      entidad: 'BVC',
-      tipo: 'acciones',
-      moneda: 'COP',
-      activa: true,
-      fechaCreacion: '2023-01-01',
-    },
-    {
-      id: 4,
-      nombre: 'Acciones de Ecopetrol',
-      entidad: 'BVC',
-      tipo: 'acciones',
-      moneda: 'COP',
-      activa: true,
-      fechaCreacion: '2023-01-01',
-    },
-    {
-      id: 5,
-      nombre: 'Acciones de Ecopetrol',
-      entidad: 'BVC',
-      tipo: 'acciones',
-      moneda: 'COP',
-      activa: true,
-      fechaCreacion: '2023-01-01',
-    },
   ];
 
   list(): Observable<Investment[]> {

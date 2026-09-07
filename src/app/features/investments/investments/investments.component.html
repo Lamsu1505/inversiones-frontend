@@ -36,19 +36,47 @@
   </select>
 </div>
 
-<div class="investments__grid">
-  @for (inv of visibleInvestments(); track inv.id) {
-    @if (summaryFor(inv.id); as summary) {
-      <app-investment-card [investment]="inv" [summary]="summary" />
-    }
+
+
+
+@if (isLoading()) {
+  <p class="investments__status">Cargando inversiones…</p>
+} @else if (loadError(); as mensaje) {
+  <div class="investments__error" role="alert">
+    <app-icon name="info" [size]="20" />
+    <div class="investments__error-body">
+      <p class="investments__error-title">No se pudieron cargar tus inversiones</p>
+      <p class="investments__error-detail">{{ mensaje }}</p>
+    </div>
+    <button class="investments__retry" type="button" (click)="retryInvestments()">
+      Reintentar
+    </button>
+  </div>
+} @else {
+  <!-- Aviso secundario: las tarjetas se ven, pero sin métricas -->
+  @if (summariesError(); as mensaje) {
+    <div class="investments__warning" role="status">
+      <span>Las métricas no están disponibles: {{ mensaje }}</span>
+      <button class="investments__retry-inline" type="button" (click)="retrySummaries()">
+        Reintentar
+      </button>
+    </div>
   }
-  <button type="button" class="investments__ghost-card" (click)="createInvestment()">
+
+  @if (hasNoResults()) {
+  <p class="investments__empty">No se encontraron inversiones con ese criterio.</p>
+}
+
+  <!-- aquí va tu grilla existente, sin cambios -->
+  <div class="investments__grid">
+    @for (inv of visibleInvestments(); track inv.id) {
+      <app-investment-card [investment]="inv" [summary]="summaryFor(inv.id)" />
+    }
+    <button type="button" class="investments__ghost-card" (click)="createInvestment()">
     <span class="investments__ghost-icon"><app-icon name="plus" [size]="20" /></span>
     <span class="investments__ghost-title">Registrar Inversión</span>
     <span class="investments__ghost-subtitle">Añade un nuevo producto a tu portafolio</span>
   </button>
-</div>
-
-@if (visibleInvestments().length === 0) {
-  <p class="investments__empty">No se encontraron inversiones con ese criterio.</p>
+  </div>
 }
+

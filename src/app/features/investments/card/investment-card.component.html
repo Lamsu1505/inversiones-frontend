@@ -7,19 +7,16 @@
         {{ investment().entidad }}
       </p>
       <p class="investment-card__ea">
-        <span class="investment-card__ea-value">{{ summary().tasaEA | percentCo }} EA</span>
+        @if (summary(); as s) {
+          <span class="investment-card__ea-value">{{ s.tasaEA | percentCo }} EA</span>
+        } @else {
+          <span class="investment-card__ea-value investment-card__ea-value--muted">— EA</span>
+        }
         <span class="investment-card__ea-label">Este mes</span>
       </p>
     </div>
 
     <div class="investment-card__header-actions">
-      <!-- <span
-        class="investment-card__badge"
-        [class.investment-card__badge--inactive]="!investment().activa"
-      >
-        <span class="investment-card__badge-dot" aria-hidden="true"></span>
-        {{ investment().activa ? 'Activa' : 'Inactiva' }}
-      </span> -->
       <button type="button" class="investment-card__menu-btn" aria-label="Más acciones">
         <app-icon name="more-vertical" [size]="16" />
       </button>
@@ -28,56 +25,103 @@
 
   <hr class="investment-card__divider" />
 
-  <div class="investment-card__row investment-card__row--hero">
-    <div>
-      <span class="investment-card__label investment-card__label--caps">Saldo Total</span>
-      <span class="investment-card__saldo-total">{{ summary().saldoTotal | currencyCo }}</span>
+  @if (summary(); as s) {
+    <!-- Con resumen: idéntico al diseño original, solo que "s" ya está
+         estrechado a InvestmentSummary (sin undefined) dentro de esta rama. -->
+    <div class="investment-card__row investment-card__row--hero">
+      <div>
+        <span class="investment-card__label investment-card__label--caps">Saldo Total</span>
+        <span class="investment-card__saldo-total">{{ s.saldoTotal | currencyCo }}</span>
+      </div>
+      <div>
+        <span class="investment-card__label investment-card__label--caps">Ganancia del Mes</span>
+        <span
+          class="investment-card__value investment-card__value--hero"
+          [class.investment-card__value--profit]="s.gananciaMes >= 0"
+          [class.investment-card__value--loss]="s.gananciaMes < 0"
+        >
+          {{ s.gananciaMes | currencyCo:true }}
+        </span>
+      </div>
     </div>
-    <div>
-      <span class="investment-card__label investment-card__label--caps">Ganancia del Mes</span>
-      <span
-        class="investment-card__value investment-card__value--hero"
-        [class.investment-card__value--profit]="summary().gananciaMes >= 0"
-        [class.investment-card__value--loss]="summary().gananciaMes < 0"
-      >
-        {{ summary().gananciaMes | currencyCo:true }}
-      </span>
-    </div>
-  </div>
 
-  <div class="investment-card__row">
-    <div>
-      <span class="investment-card__label">Saldo Disponible</span>
-      <span class="investment-card__value">{{ summary().saldoDisponible | currencyCo }}</span>
+    <div class="investment-card__row">
+      <div>
+        <span class="investment-card__label">Saldo Disponible</span>
+        <span class="investment-card__value">{{ s.saldoDisponible | currencyCo }}</span>
+      </div>
+      <div>
+        <span class="investment-card__label">Prom. Rentabilidad Dia</span>
+        <span class="investment-card__value">{{ s.promedioRentabilidadDiaria | currencyCo }}</span>
+      </div>
     </div>
-    <div>
-      <span class="investment-card__label">Prom. Rentabilidad Dia</span>
-      <span class="investment-card__value">{{ summary().promedioRentabilidadDiaria | currencyCo }}</span>
-    </div>
-  </div>
 
-  <div class="investment-card__row">
-    <div>
-      <span class="investment-card__label">Aportes/Retiros</span>
-      <span class="investment-card__value">{{ summary().aportesRetirosNetos | currencyCo }}</span>
+    <div class="investment-card__row">
+      <div>
+        <span class="investment-card__label">Aportes/Retiros</span>
+        <span class="investment-card__value">{{ s.aportesRetirosNetos | currencyCo }}</span>
+      </div>
+      <div>
+        <span class="investment-card__label">Tasa Mensual</span>
+        <span class="investment-card__value">{{ s.tasaMensual | percentCo }}</span>
+      </div>
     </div>
-    <div>
-      <span class="investment-card__label">Tasa Mensual</span>
-      <span class="investment-card__value">{{ summary().tasaMensual | percentCo }}</span>
+  } @else {
+    <!-- Sin resumen: misma estructura de filas, para que el layout no
+         "salte" entre tarjetas con y sin datos. Guion en gris, nunca $0 —
+         un cero se ve como un dato real y no lo es. -->
+    <div class="investment-card__row investment-card__row--hero">
+      <div>
+        <span class="investment-card__label investment-card__label--caps">Saldo Total</span>
+        <span class="investment-card__saldo-total investment-card__saldo-total--muted">—</span>
+      </div>
+      <div>
+        <span class="investment-card__label investment-card__label--caps">Ganancia del Mes</span>
+        <span class="investment-card__value investment-card__value--hero investment-card__value--muted">—</span>
+      </div>
     </div>
-  </div>
 
-  <app-sparkline [values]="sparklineValues()" [tone]="sparklineTone()" />
+    <div class="investment-card__row">
+      <div>
+        <span class="investment-card__label">Saldo Disponible</span>
+        <span class="investment-card__value investment-card__value--muted">—</span>
+      </div>
+      <div>
+        <span class="investment-card__label">Prom. Rentabilidad Dia</span>
+        <span class="investment-card__value investment-card__value--muted">—</span>
+      </div>
+    </div>
+
+    <div class="investment-card__row">
+      <div>
+        <span class="investment-card__label">Aportes/Retiros</span>
+        <span class="investment-card__value investment-card__value--muted">—</span>
+      </div>
+      <div>
+        <span class="investment-card__label">Tasa Mensual</span>
+        <span class="investment-card__value investment-card__value--muted">—</span>
+      </div>
+    </div>
+  }
+
+  <!-- <app-sparkline [values]="sparklineValues()" [tone]="sparklineTone()" /> -->
 
   <footer class="investment-card__footer">
-    <p
-      class="investment-card__updated"
-      [class.investment-card__updated--stale]="isStale()"
-      [title]="isStale() ? 'Han pasado más de 2 días desde el último registro' : ''"
-    >
-      <app-icon [name]="isStale() ? 'info' : 'history'" [size]="14" />
-      {{ summary().fechaUltimoRegistro | relativeDateCo }}
-    </p>
+    @if (summary(); as s) {
+      <p
+        class="investment-card__updated"
+        [class.investment-card__updated--stale]="isStale()"
+        [title]="isStale() ? 'Han pasado más de 2 días desde el último registro' : ''"
+      >
+        <app-icon [name]="isStale() ? 'info' : 'history'" [size]="14" />
+        {{ s.fechaUltimoRegistro | relativeDateCo }}
+      </p>
+    } @else {
+      <p class="investment-card__updated investment-card__updated--muted">
+        <app-icon name="history" [size]="14" />
+        Sin registros aún
+      </p>
+    }
 
     <div class="investment-card__actions">
       <button type="button" class="investment-card__btn investment-card__btn--primary">
