@@ -70,7 +70,7 @@
   <!-- aquí va tu grilla existente, sin cambios -->
   <div class="investments__grid">
     @for (inv of visibleInvestments(); track inv.id) {
-      <app-investment-card [investment]="inv" [summary]="summaryFor(inv.id)" />
+      <app-investment-card [investment]="inv" [summary]="summaryById().get(inv.id)" />
     }
     <button type="button" class="investments__ghost-card" (click)="createInvestment()">
     <span class="investments__ghost-icon"><app-icon name="plus" [size]="20" /></span>

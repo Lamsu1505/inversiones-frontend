@@ -6,14 +6,15 @@
 
 <div class="dashboard__kpis">
   <app-kpi-card
+    [icon]="'total_investment'"
     label="Valor Total"
     [value]="formattedValorTotal()"
   />
   <app-kpi-card
+    [icon]="'total_profit'"
     label="Ganancia del Período"
     [value]="formattedGanancia()"
-    [tone]="(summary()?.gananciaPeriodo ?? 0) >= 0 ? 'profit' : 'loss'"
-  />
+    [tone]="gananciaTone()"  />
   <app-kpi-card
     label="Promedio Diario"
     [value]="formattedPromedioDiario()"

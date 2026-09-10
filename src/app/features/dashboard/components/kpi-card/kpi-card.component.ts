@@ -11,6 +11,7 @@ export type KpiTone = 'neutral' | 'profit' | 'loss';
   imports: [IconComponent],
 })
 export class KpiCardComponent {
+  icon = input<IconName>('info');
   label = input.required<string>();
   value = input.required<string>();
   subtitle = input<string>('');

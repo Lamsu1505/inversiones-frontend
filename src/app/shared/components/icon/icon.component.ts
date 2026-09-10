@@ -18,6 +18,8 @@ export type IconName =
   | 'more-vertical'
   | 'search'
   | 'calculator'
+  | 'total_investment'
+  | 'total_profit'
   ;
 
 @Component({

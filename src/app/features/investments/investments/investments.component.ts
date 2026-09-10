@@ -70,6 +70,17 @@ export class InvestmentsComponent {
     return map;
   });
 
+  /** Lookup O(1) — vacío mientras carga o si falló. */
+  protected readonly summaryById = computed(() => {
+    const map = new Map<number, InvestmentSummary>();
+    if (this.summariesRes.hasValue()) {
+      for (const s of this.summariesRes.value()) {
+        map.set(s.investmentId, s);
+      }
+    }
+    return map;
+  });
+
   // ── Estado de la UI: filtro, búsqueda, orden ──────────────────────────
 
   protected readonly statusFilter = signal<StatusFilter>('activas');
@@ -82,7 +93,9 @@ export class InvestmentsComponent {
 
   protected readonly visibleInvestments = computed(() => {
     const query = this.searchQuery().trim().toLowerCase();
+
     const status = this.statusFilter();
+
     const summariesById = this.summariesById();
 
     const filtered = this.investments().filter((inv) => {

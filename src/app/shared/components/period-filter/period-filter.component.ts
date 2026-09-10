@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { DashboardFilterService, PeriodPreset } from '../../../core/services/dashboard-filter.service';
 import { InvestmentsRepository } from '../../../core/repositories/investments.repository';
 import { Investment } from '../../../core/models/investment/investment.model';
@@ -16,8 +16,6 @@ interface PresetOption {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeriodFilterComponent {
-  // Se expone el propio servicio al template para leer .filter() y .activePreset()
-  // directamente en el HTML, sin duplicar esos signals aquí como @Input.
   protected readonly filterService = inject(DashboardFilterService);
   private readonly investmentsRepository = inject(InvestmentsRepository);
 
@@ -29,16 +27,24 @@ export class PeriodFilterComponent {
     { value: 'historico', label: 'Historico' },
   ];
 
-  // Convierte el Observable del repository en un Signal.
-  // Mientras no haya respuesta, el template ve una lista vacía (sin errores).
-  protected readonly investments = toSignal(this.investmentsRepository.list(), {
-    initialValue: [] as Investment[],
+  // CORRECCIÓN: antes era toSignal(this.investmentsRepository.list(), {...}),
+  // una suscripción DIRECTA y SÍNCRONA a un observable del repository en el
+  // inicializador de campo — el mismo molde exacto del bug que tumbó el
+  // Sidebar. Hoy no fallaba porque list() funciona contra el backend real,
+  // pero el día que ese endpoint falle, esto habría lanzado dentro del
+  // constructor y roto este componente entero. Se corrige ahora, antes de
+  // que vuelva a doler.
+  protected readonly investmentsRes = rxResource({
+    stream: () => this.investmentsRepository.list(),
+    defaultValue: [] as Investment[],
   });
 
-  // Texto para el placeholder "Todas las inversiones (4)" — se recalcula
-  // solo cuando cambia la lista de inversiones, no en cada render.
+  protected readonly investments = computed(() =>
+    this.investmentsRes.hasValue() ? this.investmentsRes.value() : [],
+  );
+
   protected readonly allInvestmentsLabel = computed(
-    () => `Todas las inversiones (${this.investments().length})`
+    () => `Todas las inversiones (${this.investments().length})`,
   );
 
   protected selectPreset(preset: PeriodPreset): void {
