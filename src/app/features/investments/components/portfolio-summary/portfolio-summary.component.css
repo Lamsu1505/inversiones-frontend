@@ -1,0 +1,72 @@
+.portfolio-summary {
+  container-type: inline-size;
+  container-name: portfolio-summary;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: calc(var(--spacing-unit) * 5);
+
+  padding: calc(var(--spacing-unit) * 5) calc(var(--spacing-unit) * 6);
+  margin-bottom: calc(var(--spacing-unit) * 6);
+
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.portfolio-summary__item {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+  min-width: 0;
+}
+
+.portfolio-summary__label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.portfolio-summary__value {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portfolio-summary__value--hero {
+  font-size: 1.75rem;
+}
+
+.portfolio-summary__value--profit { color: var(--color-profit); }
+.portfolio-summary__value--loss   { color: var(--color-loss); }
+
+.portfolio-summary__value--empty {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.portfolio-summary__hint {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+/* El bloque se encoge cuando el espacio escasea; no se reapila.
+   Umbral en 320px, bien por debajo del minmax(160px) de la grilla
+   para evitar la colisión del principio #21. */
+@container portfolio-summary (max-width: 320px) {
+  .portfolio-summary {
+    padding: calc(var(--spacing-unit) * 4);
+    gap: calc(var(--spacing-unit) * 3);
+  }
+  .portfolio-summary__value       { font-size: 1.0625rem; }
+  .portfolio-summary__value--hero { font-size: 1.375rem; }
+}

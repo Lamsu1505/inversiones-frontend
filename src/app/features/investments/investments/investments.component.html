@@ -53,6 +53,10 @@
     </button>
   </div>
 } @else {
+
+  <app-portfolio-summary
+  [summaries]="summariesRes.hasValue() ? summariesRes.value() : undefined" />
+
   <!-- Aviso secundario: las tarjetas se ven, pero sin métricas -->
   @if (summariesError(); as mensaje) {
     <div class="investments__warning" role="status">

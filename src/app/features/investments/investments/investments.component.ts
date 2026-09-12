@@ -7,13 +7,16 @@ import { InvestmentSummary } from '../../../core/models/investment/investment-su
 import { InvestmentCardComponent } from '../card/investment-card.component';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
 import { toUserMessage } from '../../../core/errors/error-message.util';
+import { CurrencyCoPipe } from '../../../shared/pipes/currency-co.pipe';
+import { PortfolioSummaryComponent } from '../components/portfolio-summary/portfolio-summary.component';
+
 
 type StatusFilter = 'activas' | 'inactivas' | 'todas';
 type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
 
 @Component({
   selector: 'app-investments',
-  imports: [InvestmentCardComponent, IconComponent],
+  imports: [InvestmentCardComponent, IconComponent, CurrencyCoPipe, PortfolioSummaryComponent],
   templateUrl: './investments.component.html',
   styleUrl: './investments.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +43,19 @@ export class InvestmentsComponent {
   private readonly summaries = computed(() =>
     this.summariesRes.hasValue() ? this.summariesRes.value() : [],
   );
+
+  protected readonly gananciaTotalMes = computed(() => {
+    if (!this.summariesRes.hasValue()) return null;
+
+    const valores = this.summariesRes.value()
+      .map((s) => s.gananciaMes)
+      .filter((g): g is number => g !== null);
+
+    // Sin ninguna ganancia calculable, no hay total — no un cero.
+    return valores.length > 0
+      ? valores.reduce((acc, g) => acc + g, 0)
+      : null;
+});
 
   /** isLoading() y no status()==='loading': un reintento reporta 'reloading'. */
   protected readonly isLoading = computed(() => this.investmentsRes.isLoading());
@@ -85,7 +101,7 @@ export class InvestmentsComponent {
 
   protected readonly statusFilter = signal<StatusFilter>('activas');
   protected readonly searchQuery = signal('');
-  protected readonly sortBy = signal<SortOption>('nombre');
+  protected readonly sortBy = signal<SortOption>('saldo');
 
   protected readonly activeCount = computed(() => this.investments().filter((i) => i.activa).length);
   protected readonly inactiveCount = computed(() => this.investments().filter((i) => !i.activa).length);

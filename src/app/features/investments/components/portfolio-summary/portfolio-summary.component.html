@@ -1,0 +1,38 @@
+<section class="portfolio-summary" aria-label="Resumen del portafolio">
+  <div class="portfolio-summary__item portfolio-summary__item--hero">
+    <span class="portfolio-summary__label">Ganancia del mes</span>
+    <span class="portfolio-summary__value portfolio-summary__value--hero"
+          [class.portfolio-summary__value--profit]="(gananciaMes() ?? 0) > 0"
+          [class.portfolio-summary__value--loss]="(gananciaMes() ?? 0) < 0"
+          [class.portfolio-summary__value--empty]="gananciaMes() === null">
+      {{ gananciaMes() | currencyCo:true }}
+    </span>
+  </div>
+
+  <div class="portfolio-summary__item">
+    <span class="portfolio-summary__label">Prom. diario</span>
+    <span class="portfolio-summary__value"
+          [class.portfolio-summary__value--empty]="promedioDiario() === null">
+      {{ promedioDiario() | currencyCo }}
+    </span>
+  </div>
+
+  <div class="portfolio-summary__item">
+    <span class="portfolio-summary__label">Tasa mensual</span>
+    <span class="portfolio-summary__value"
+          [class.portfolio-summary__value--empty]="tasaMensual() === null">
+      {{ tasaMensual() | percentCo:false:4 }}
+    </span>
+  </div>
+
+  <div class="portfolio-summary__item">
+    <span class="portfolio-summary__label">Tasa EA ponderada</span>
+    <span class="portfolio-summary__value"
+          [class.portfolio-summary__value--empty]="tasaEA() === null">
+      {{ tasaEA() | percentCo }}
+    </span>
+    @if (hayDatos()) {
+      <span class="portfolio-summary__hint">Este mes (por ahora)</span>
+    }
+  </div>
+</section>
