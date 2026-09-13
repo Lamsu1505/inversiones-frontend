@@ -26,6 +26,10 @@ export class InvestmentsComponent {
 
   // ── Datos remotos ─────────────────────────────────────────────────────
 
+  protected readonly referenceRes = rxResource({
+    stream: () => this.repository.portfolioReference(),
+  });
+
   protected readonly investmentsRes = rxResource({
     stream: () => this.repository.list(),
     defaultValue: [] as Investment[],

@@ -3,36 +3,93 @@
   container-name: portfolio-summary;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: calc(var(--spacing-unit) * 5);
-
-  padding: calc(var(--spacing-unit) * 5) calc(var(--spacing-unit) * 6);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: calc(var(--spacing-unit) * 3);
   margin-bottom: calc(var(--spacing-unit) * 6);
-
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
 }
 
-.portfolio-summary__item {
+/* --- Tarjeta --- */
+
+.portfolio-summary__card {
   display: flex;
   flex-direction: column;
   gap: calc(var(--spacing-unit) * 1);
   min-width: 0;
+
+  padding: calc(var(--spacing-unit) * 4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  text-align: left;
+  font: inherit;
 }
 
+.portfolio-summary__card--flippable {
+  cursor: pointer;
+  perspective: 800px;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.portfolio-summary__card--flippable:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-lg);
+}
+
+/* --- Volteo --- */
+
+.portfolio-summary__inner {
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.portfolio-summary__card--flipped .portfolio-summary__inner {
+  transform: rotateY(180deg);
+}
+
+.portfolio-summary__face {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+  min-width: 0;
+
+  padding: calc(var(--spacing-unit) * 4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  backface-visibility: hidden;
+}
+
+.portfolio-summary__face--back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+
+/* --- Contenido --- */
+
 .portfolio-summary__label {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+
   font-family: var(--font-body);
   font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
 }
 
 .portfolio-summary__value {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--color-text-primary);
 
@@ -41,9 +98,8 @@
   white-space: nowrap;
 }
 
-.portfolio-summary__value--hero {
-  font-size: 1.75rem;
-}
+/* Jerarquía: Saldo y Ganancia son nivel 1. */
+.portfolio-summary__value--hero { font-size: 1.5rem; }
 
 .portfolio-summary__value--profit { color: var(--color-profit); }
 .portfolio-summary__value--loss   { color: var(--color-loss); }
@@ -57,16 +113,39 @@
   font-family: var(--font-body);
   font-size: 0.6875rem;
   color: var(--color-text-muted);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* El bloque se encoge cuando el espacio escasea; no se reapila.
-   Umbral en 320px, bien por debajo del minmax(160px) de la grilla
-   para evitar la colisión del principio #21. */
-@container portfolio-summary (max-width: 320px) {
-  .portfolio-summary {
-    padding: calc(var(--spacing-unit) * 4);
-    gap: calc(var(--spacing-unit) * 3);
+/* --- Responsive: encoger, no reapilar (principio #21).
+   Umbral 200px contra minmax(180px): la grilla nunca produce
+   una tarjeta por debajo de 180px, así que no colisionan. --- */
+
+@container portfolio-summary (max-width: 200px) {
+  .portfolio-summary__card,
+  .portfolio-summary__face {
+    padding: calc(var(--spacing-unit) * 3);
   }
-  .portfolio-summary__value       { font-size: 1.0625rem; }
-  .portfolio-summary__value--hero { font-size: 1.375rem; }
+  .portfolio-summary__value       { font-size: 1rem; }
+  .portfolio-summary__value--hero { font-size: 1.25rem; }
+  .portfolio-summary__hint        { display: none; }
+}
+
+/* --- Accesibilidad: sin rotación 3D si el usuario la evita --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-summary__inner { transition: none; }
+
+  .portfolio-summary__card--flipped .portfolio-summary__inner {
+    transform: none;
+  }
+  .portfolio-summary__card--flipped .portfolio-summary__face {
+    visibility: hidden;
+  }
+  .portfolio-summary__card--flipped .portfolio-summary__face--back {
+    visibility: visible;
+    transform: none;
+  }
 }

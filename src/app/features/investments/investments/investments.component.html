@@ -55,7 +55,8 @@
 } @else {
 
   <app-portfolio-summary
-  [summaries]="summariesRes.hasValue() ? summariesRes.value() : undefined" />
+  [summaries]="summariesRes.hasValue() ? summariesRes.value() : undefined"
+  [reference]="referenceRes.hasValue() ? referenceRes.value() : undefined" />
 
   <!-- Aviso secundario: las tarjetas se ven, pero sin métricas -->
   @if (summariesError(); as mensaje) {

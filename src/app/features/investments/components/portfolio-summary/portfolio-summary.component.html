@@ -1,38 +1,112 @@
 <section class="portfolio-summary" aria-label="Resumen del portafolio">
-  <div class="portfolio-summary__item portfolio-summary__item--hero">
-    <span class="portfolio-summary__label">Ganancia del mes</span>
-    <span class="portfolio-summary__value portfolio-summary__value--hero"
-          [class.portfolio-summary__value--profit]="(gananciaMes() ?? 0) > 0"
-          [class.portfolio-summary__value--loss]="(gananciaMes() ?? 0) < 0"
-          [class.portfolio-summary__value--empty]="gananciaMes() === null">
-      {{ gananciaMes() | currencyCo:true }}
+
+  <!-- Saldo total — nivel 1, sin reverso -->
+  <div class="portfolio-summary__card portfolio-summary__card--hero">
+    <span class="portfolio-summary__label">
+      <app-icon [name]="icons['saldo']" [size]="14" />
+      Portafolio
     </span>
+    <span class="portfolio-summary__value portfolio-summary__value--hero"
+          [class.portfolio-summary__value--empty]="saldoTotal() === null">
+      {{ saldoTotal() | currencyCo }}
+    </span>
+    <span class="portfolio-summary__hint">Saldo total</span>
   </div>
 
-  <div class="portfolio-summary__item">
-    <span class="portfolio-summary__label">Prom. diario</span>
+  <!-- Ganancia del mes — nivel 1, con reverso -->
+  <button type="button"
+          class="portfolio-summary__card portfolio-summary__card--hero
+                 portfolio-summary__card--flippable"
+          [class.portfolio-summary__card--flipped]="isFlipped('ganancia')"
+          [attr.aria-pressed]="isFlipped('ganancia')"
+          (click)="toggleFlip('ganancia')">
+    <span class="portfolio-summary__inner">
+
+      <span class="portfolio-summary__face">
+        <span class="portfolio-summary__label">
+          <app-icon [name]="icons['ganancia']" [size]="14" />
+          Ganancia del mes
+        </span>
+        <span class="portfolio-summary__value portfolio-summary__value--hero"
+              [class]="signoClase(gananciaMes())">
+          {{ gananciaMes() | currencyCo:true }}
+        </span>
+        <span class="portfolio-summary__hint">Rendimientos del mes</span>
+      </span>
+
+      <span class="portfolio-summary__face portfolio-summary__face--back">
+        <span class="portfolio-summary__label">
+          <app-icon [name]="icons['ganancia']" [size]="14" />
+          Ganancia del mes
+        </span>
+        <span class="portfolio-summary__value portfolio-summary__value--hero"
+              [class]="signoClase(deltaGanancia())">
+          {{ deltaGanancia() | currencyCo:true }}
+        </span>
+        <span class="portfolio-summary__hint">Respecto a los últimos 3 meses</span>
+      </span>
+
+    </span>
+  </button>
+
+  <!-- Promedio diario — nivel 2, sin reverso -->
+  <div class="portfolio-summary__card">
+    <span class="portfolio-summary__label">
+      <app-icon [name]="icons['promedio']" [size]="14" />
+      Promedio diario
+    </span>
     <span class="portfolio-summary__value"
           [class.portfolio-summary__value--empty]="promedioDiario() === null">
       {{ promedioDiario() | currencyCo }}
     </span>
+    <span class="portfolio-summary__hint">Rentabilidad promedio diaria</span>
   </div>
 
-  <div class="portfolio-summary__item">
-    <span class="portfolio-summary__label">Tasa mensual</span>
+  <!-- Tasa mensual — nivel 2, sin reverso -->
+  <div class="portfolio-summary__card">
+    <span class="portfolio-summary__label">
+      <app-icon [name]="icons['mensual']" [size]="14" />
+      Tasa mensual
+    </span>
     <span class="portfolio-summary__value"
           [class.portfolio-summary__value--empty]="tasaMensual() === null">
       {{ tasaMensual() | percentCo:false:4 }}
     </span>
+    <span class="portfolio-summary__hint">Tasa mensual nominal</span>
   </div>
 
-  <div class="portfolio-summary__item">
-    <span class="portfolio-summary__label">Tasa EA ponderada</span>
-    <span class="portfolio-summary__value"
-          [class.portfolio-summary__value--empty]="tasaEA() === null">
-      {{ tasaEA() | percentCo }}
+  <!-- Tasa EA — nivel 2, con reverso -->
+  <button type="button"
+          class="portfolio-summary__card portfolio-summary__card--flippable"
+          [class.portfolio-summary__card--flipped]="isFlipped('ea')"
+          [attr.aria-pressed]="isFlipped('ea')"
+          (click)="toggleFlip('ea')">
+    <span class="portfolio-summary__inner">
+
+      <span class="portfolio-summary__face">
+        <span class="portfolio-summary__label">
+          <app-icon [name]="icons['ea']" [size]="14" />
+          Tasa EA
+        </span>
+        <span class="portfolio-summary__value"
+              [class.portfolio-summary__value--empty]="tasaEA() === null">
+          {{ tasaEA() | percentCo }}
+        </span>
+        <span class="portfolio-summary__hint">Tasa llevada a Efectiva Anual</span>
+      </span>
+
+      <span class="portfolio-summary__face portfolio-summary__face--back">
+        <span class="portfolio-summary__label">
+          <app-icon [name]="icons['ea']" [size]="14" />
+          Tasa EA
+        </span>
+        <span class="portfolio-summary__value" [class]="signoClase(deltaEA())">
+          {{ deltaEA() | percentCo:true }}
+        </span>
+        <span class="portfolio-summary__hint">Respecto al histórico</span>
+      </span>
+
     </span>
-    @if (hayDatos()) {
-      <span class="portfolio-summary__hint">Este mes (por ahora)</span>
-    }
-  </div>
+  </button>
+
 </section>

@@ -5,6 +5,7 @@ import { DailyRecord, DailyStats } from '../models/investment/daily-record.model
 import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
 import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
 import { InvestmentSummary } from '../models/investment/investment-summary.model';
+import { PortfolioReference } from '../models/portfolio-reference.model';
 
 export abstract class InvestmentsRepository {
   abstract list(): Observable<Investment[]>;
@@ -16,5 +17,8 @@ export abstract class InvestmentsRepository {
   /** Resúmenes de todas las inversiones en una sola llamada — usado por la página
    *  de listado para poder ordenar por Saldo/Rentabilidad sin N peticiones. */
   abstract investmentSummaries(): Observable<InvestmentSummary[]>;
+  
+  /** Referencias de comparación. Nunca incluye el mes en curso. */
+  abstract portfolioReference(): Observable<PortfolioReference>;
 }
 

@@ -7,6 +7,7 @@ import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
 import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
 import { InvestmentSummary } from '../models/investment/investment-summary.model';
 import { InvestmentTipo } from '../models/investment/investment-tipo.model';
+import { PortfolioReference } from '../models/portfolio-reference.model';
 
 
 @Injectable()
@@ -77,5 +78,13 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
       fechaUltimoRegistro: null,
     }
   );
+}
+
+portfolioReference(): Observable<PortfolioReference> {
+  return of({
+    gananciaDiaria3m: 12345,
+    dias3m: 90,
+    tasaDiariaHist: 0.00123,
+  });
 }
 }
