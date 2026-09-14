@@ -11,4 +11,6 @@ export interface Investment {
   moneda: string;
   activa: boolean;
   fechaCreacion: string;
+  rastreaValorUnidad: boolean;
+  rastreaSaldoDisponible: boolean;
 }

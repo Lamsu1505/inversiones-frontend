@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CurrencyCoPipe } from '../../../shared/pipes/currency-co.pipe';
 import { PercentCoPipe } from '../../../shared/pipes/percent-co.pipe';
@@ -19,8 +19,9 @@ import { InvestmentSummary } from '../../../core/models/investment/investment-su
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvestmentCardComponent {
-  investment = input.required<Investment>();
-  summary = input<InvestmentSummary>();
+
+  readonly investment = input.required<Investment>();
+  readonly summary = input<InvestmentSummary | undefined>();
 
   private readonly repository = inject(InvestmentsRepository);
 
@@ -34,6 +35,8 @@ export class InvestmentCardComponent {
     if (!fecha) return false;
     return daysSinceIso(fecha) > 2;
   });
+
+  readonly agregarDia = output<Investment>();
 
   // ── Sparkline ──────────────────────────────────────────────────────────
   //

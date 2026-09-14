@@ -43,7 +43,7 @@
               [class]="signoClase(deltaGanancia())">
           {{ deltaGanancia() | currencyCo:true }}
         </span>
-        <span class="portfolio-summary__hint">Respecto a los últimos 3 meses</span>
+        <span class="portfolio-summary__hint">A día {{ diasDelMes() }} de los ultimos 3 meses</span>
       </span>
 
     </span>
@@ -103,7 +103,7 @@
         <span class="portfolio-summary__value" [class]="signoClase(deltaEA())">
           {{ deltaEA() | percentCo:true }}
         </span>
-        <span class="portfolio-summary__hint">Respecto al histórico</span>
+        <span class="portfolio-summary__hint">Prom dia {{ diasDelMes() }} de los ultimos 3 meses</span>
       </span>
 
     </span>

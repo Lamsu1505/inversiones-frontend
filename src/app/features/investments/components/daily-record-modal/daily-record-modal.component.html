@@ -1,0 +1,170 @@
+<div class="modal__backdrop" (click)="onBackdrop($event)"
+     (keydown.escape)="onEscape()" tabindex="-1">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-nombre">
+
+    <header class="modal__header">
+      <div class="modal__title-block">
+        <p class="modal__eyebrow">
+          Añadir día
+          @if (tipoLabel(); as tipo) {
+            <span class="modal__badge">{{ tipo }}</span>
+          }
+        </p>
+        <h2 class="modal__name" id="modal-nombre">{{ investment().nombre }}</h2>
+        @if (investment().entidad; as entidad) {
+          <p class="modal__entity">{{ entidad }}</p>
+        }
+      </div>
+      <button type="button" class="modal__close" aria-label="Cerrar"
+              (click)="cerrar.emit()">
+        <app-icon name="plus" [size]="18" />
+      </button>
+    </header>
+
+    <form class="modal__form" [formGroup]="form" (ngSubmit)="onSubmit()"
+          (input)="onAnyInput()">
+
+      <div class="modal__date-row">
+        <label class="modal__date-label" for="fecha">Fecha de registro:</label>
+        <div class="modal__date-field">
+          <app-icon name="history" [size]="15" />
+          <input id="fecha" type="date" formControlName="fecha" [max]="hoy" />
+          @if (esHoy()) { <span class="modal__badge modal__badge--today">Hoy</span> }
+        </div>
+      </div>
+
+      @if (fechaDuplicada()) {
+        <p class="field__error" role="alert">
+          Ya registraste este día. Para cambiarlo, usá <strong>Editar día</strong>
+          desde el menú de la tarjeta.
+        </p>
+      }
+
+      <div class="modal__fields">
+
+        <div class="field">
+          <label class="field__label" for="saldoTotal">Saldo total</label>
+          <div class="field__wrap">
+            <span class="field__prefix">$</span>
+            <input class="field__input field__input--hero" id="saldoTotal"
+                   type="text" inputmode="decimal" appCurrencyInput
+                   formControlName="saldoTotal" placeholder="0" />
+          </div>
+          @if (form.controls.saldoTotal.touched && form.controls.saldoTotal.invalid) {
+            <p class="field__error" role="alert">El saldo total es obligatorio.</p>
+          } @else if (deltaSaldoTotal() !== null) {
+            <p class="delta" [class]="signoClase(deltaSaldoTotal())">
+              {{ deltaSaldoTotal() | currencyCo:true }}
+              <span class="delta__note">(vs. registro anterior)</span>
+            </p>
+          }
+        </div>
+
+        @if (investment().rastreaSaldoDisponible) {
+          <div class="field">
+            <label class="field__label" for="saldoDisponible">Saldo disponible</label>
+            <div class="field__wrap">
+              <span class="field__prefix">$</span>
+              <input class="field__input field__input--hero" id="saldoDisponible"
+                     type="text" inputmode="decimal" appCurrencyInput
+                     formControlName="saldoDisponible" placeholder="0" />
+            </div>
+            @if (deltaSaldoDisponible() !== null) {
+              <p class="delta" [class]="signoClase(deltaSaldoDisponible())">
+                {{ deltaSaldoDisponible() | currencyCo:true }}
+              </p>
+            }
+          </div>
+        }
+
+        @if (investment().rastreaValorUnidad) {
+          <div class="modal__row">
+            <div class="field">
+              <label class="field__label" for="valorUnidad">Valor unidad</label>
+              <div class="field__wrap">
+                <span class="field__prefix">$</span>
+                <input class="field__input" id="valorUnidad" type="text"
+                       inputmode="decimal" appCurrencyInput
+                       formControlName="valorUnidad" placeholder="0" />
+              </div>
+              @if (deltaValorUnidad() !== null) {
+                <p class="delta" [class]="signoClase(deltaValorUnidad())">
+                  {{ deltaValorUnidad() | currencyCo:true }}
+                </p>
+              }
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="cantidadUnidades">Unidades</label>
+              <div class="field__wrap">
+                <input class="field__input field__input--plain" id="cantidadUnidades"
+                       type="number" inputmode="decimal" step="0.0001"
+                       formControlName="cantidadUnidades" placeholder="0" />
+              </div>
+              @if (sinCambioUnidades()) {
+                <p class="delta delta--neutral">Sin cambio de títulos</p>
+              } @else if (deltaUnidades() !== null) {
+                <p class="delta" [class]="signoClase(deltaUnidades())">
+                  {{ deltaUnidades() | currencyCo:true }}
+                </p>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="field">
+          <div class="field__label-row">
+            <label class="field__label" for="nota">
+              Nota <span class="field__optional">(Opcional)</span>
+            </label>
+            <span class="field__counter">{{ notaLength() }}/{{ notaMax }}</span>
+          </div>
+          <div class="field__wrap">
+            <input class="field__input field__input--plain" id="nota" type="text"
+                   [maxlength]="notaMax" formControlName="nota"
+                   placeholder="Ej. Rendimiento quincenal o ajuste bancario..." />
+          </div>
+        </div>
+
+        @if (resultado(); as r) {
+          <div class="result" role="status">
+            <span class="result__icon"><app-icon name="trending" [size]="16" /></span>
+            <div class="result__body">
+              <p class="result__label">Rendimiento del día</p>
+              <p class="result__title">Día registrado con éxito</p>
+            </div>
+            <div class="result__figures">
+              @if (r.variacionPct !== null) {
+                <span class="result__pct" [class]="signoClase(r.variacionPct)">
+                  {{ r.variacionPct | percentCo:true }}
+                </span>
+              }
+              @if (r.gananciaDia !== null) {
+                <span class="result__amount" [class]="signoClase(r.gananciaDia)">
+                  {{ r.gananciaDia | currencyCo:true }} neto
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+      </div>
+
+      @if (errorGuardar(); as mensaje) {
+        <p class="modal__save-error" role="alert">{{ mensaje }}</p>
+      }
+
+      <footer class="modal__footer">
+        <button type="button" class="btn btn--ghost" (click)="cerrar.emit()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn--primary"
+                [disabled]="fechaDuplicada() || guardando()">
+          <app-icon name="plus" [size]="14" />
+          {{ guardando() ? 'Guardando…' : 'Guardar día' }}
+        </button>
+      </footer>
+
+    </form>
+  </div>
+</div>

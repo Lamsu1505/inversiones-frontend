@@ -9,6 +9,9 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
 import { toUserMessage } from '../../../core/errors/error-message.util';
 import { CurrencyCoPipe } from '../../../shared/pipes/currency-co.pipe';
 import { PortfolioSummaryComponent } from '../components/portfolio-summary/portfolio-summary.component';
+import { DailyRecordInput } from '../../../core/models/investment/daily-record-form.model';
+import { DailyRecordModalComponent } from '../components/daily-record-modal/daily-record-modal.component';
+import { DailyRecordResult } from '../../../core/models/investment/daily-record-result.model';
 
 
 type StatusFilter = 'activas' | 'inactivas' | 'todas';
@@ -16,7 +19,7 @@ type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
 
 @Component({
   selector: 'app-investments',
-  imports: [InvestmentCardComponent, IconComponent, CurrencyCoPipe, PortfolioSummaryComponent],
+  imports: [InvestmentCardComponent, IconComponent, PortfolioSummaryComponent, DailyRecordModalComponent],
   templateUrl: './investments.component.html',
   styleUrl: './investments.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -111,6 +114,51 @@ export class InvestmentsComponent {
   protected readonly inactiveCount = computed(() => this.investments().filter((i) => !i.activa).length);
   protected readonly totalCount = computed(() => this.investments().length);
 
+
+  protected readonly errorGuardar = signal<string | null>(null);
+  protected readonly modalInvestment = signal<Investment | null>(null);
+  protected readonly guardandoDia = signal(false);
+  protected readonly resultadoDia = signal<DailyRecordResult | null>(null);
+
+  protected abrirModal(inv: Investment): void {
+    this.resultadoDia.set(null);   // limpia el resultado del día anterior
+    this.modalInvestment.set(inv);
+  }
+
+  protected cerrarModal(): void {
+    this.modalInvestment.set(null);
+    this.resultadoDia.set(null);
+    this.errorGuardar.set(null);
+  }
+
+  protected onGuardarDia(input: DailyRecordInput): void {
+    this.guardandoDia.set(true);
+    this.errorGuardar.set(null);
+
+    this.repository.saveRecords(input.investmentId, [input]).subscribe({
+      next: (guardados) => {
+        this.guardandoDia.set(false);
+
+        const r = guardados[0];
+        if (r) {
+          this.resultadoDia.set({
+            gananciaDia: r.gananciaDia ?? null,
+            variacionPct: r.variacionPct ?? null,
+          });
+        }
+
+        // Los datos cambiaron: el resumen y la referencia ya no son válidos.
+        this.summariesRes.reload();
+        this.referenceRes.reload();
+      },
+      error: (err) => {
+        this.guardandoDia.set(false);
+        this.errorGuardar.set(toUserMessage(err));
+      },
+    });
+  }
+
+  
   protected readonly visibleInvestments = computed(() => {
     const query = this.searchQuery().trim().toLowerCase();
 

@@ -124,7 +124,8 @@
     }
 
     <div class="investment-card__actions">
-      <button type="button" class="investment-card__btn investment-card__btn--primary">
+      <button type="button" class="investment-card__btn investment-card__btn--primary"
+      (click)="agregarDia.emit(investment())">
         <app-icon name="plus" [size]="14" /> Añadir Día
       </button>
       <button type="button" class="investment-card__btn">Histórico</button>

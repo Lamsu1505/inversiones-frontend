@@ -6,8 +6,9 @@ import { InvestmentsRepository } from './investments.repository';
 import { Investment } from '../models/investment/investment.model';
 import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
 import { InvestmentSummary } from '../models/investment/investment-summary.model';
-import { DailyStats } from '../models/investment/daily-record.model';
+import { DailyRecordDetail, DailyStats } from '../models/investment/daily-record.model';
 import { PortfolioReference } from '../models/portfolio-reference.model';
+import { DailyRecordInput } from '../models/investment/daily-record-form.model';
 
 @Injectable()
 export class HttpInvestmentsRepository extends InvestmentsRepository {
@@ -23,8 +24,14 @@ export class HttpInvestmentsRepository extends InvestmentsRepository {
     return throwError(() => new Error('records() aún no implementado en el backend real'));
   }
 
-  saveRecords(): Observable<void> {
-    return throwError(() => new Error('saveRecords() aún no implementado en el backend real'));
+  saveRecords(
+    investmentId: number,
+    records: DailyRecordInput[]
+  ): Observable<DailyRecordDetail[]> {
+    return this.http.post<DailyRecordDetail[]>(
+      `${this.baseUrl}/investments/${investmentId}/records`,
+      records
+    );
   }
 
   dashboardSummary(): Observable<DashboardSummary> {
@@ -43,5 +50,11 @@ export class HttpInvestmentsRepository extends InvestmentsRepository {
 
   portfolioReference(): Observable<PortfolioReference> {
     return this.http.get<PortfolioReference>(`${this.baseUrl}/dashboard/reference`);
+  }
+
+  lastRecord(investmentId: number): Observable<DailyRecordDetail | null> {
+    return this.http.get<DailyRecordDetail | null>(
+      `${this.baseUrl}/investments/${investmentId}/records/last`
+    );
   }
 }

@@ -74,14 +74,26 @@
 
   <!-- aquí va tu grilla existente, sin cambios -->
   <div class="investments__grid">
-    @for (inv of visibleInvestments(); track inv.id) {
-      <app-investment-card [investment]="inv" [summary]="summaryById().get(inv.id)" />
-    }
-    <button type="button" class="investments__ghost-card" (click)="createInvestment()">
-    <span class="investments__ghost-icon"><app-icon name="plus" [size]="20" /></span>
-    <span class="investments__ghost-title">Registrar Inversión</span>
-    <span class="investments__ghost-subtitle">Añade un nuevo producto a tu portafolio</span>
+  @for (inv of visibleInvestments(); track inv.id) {
+    <app-investment-card
+      [investment]="inv"
+      [summary]="summaryById().get(inv.id)"
+      (agregarDia)="abrirModal($event)" />
+  }
+  <button type="button" class="investments__ghost-card" (click)="createInvestment()">
+    ...
   </button>
-  </div>
+</div>
+}
+
+
+@if (modalInvestment(); as inv) {
+  <app-daily-record-modal
+    [investment]="inv"
+    [resultado]="resultadoDia()"
+    [guardando]="guardandoDia()"
+    [errorGuardar]="errorGuardar()"
+    (cerrar)="cerrarModal()"
+    (guardar)="onGuardarDia($event)" />
 }
 

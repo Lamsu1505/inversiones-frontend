@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { InvestmentsRepository } from './investments.repository';
 import { Investment } from '../models/investment/investment.model';
-import { DailyRecord, DailyStats } from '../models/investment/daily-record.model';
+import { DailyRecord, DailyRecordDetail, DailyStats } from '../models/investment/daily-record.model';
 import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
 import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
 import { InvestmentSummary } from '../models/investment/investment-summary.model';
 import { InvestmentTipo } from '../models/investment/investment-tipo.model';
 import { PortfolioReference } from '../models/portfolio-reference.model';
+import { DailyRecordInput } from '../models/investment/daily-record-form.model';
 
 
 @Injectable()
@@ -23,8 +24,11 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
     return of([]);
   }
 
-  saveRecords(_records: DailyRecord[]): Observable<void> {
-    return of(undefined);
+  saveRecords(
+    investmentId: number,
+    records: DailyRecordInput[]
+  ): Observable<DailyRecordDetail[]> {
+    return throwError(() => new Error('saveRecords() no implementado en el mock'));
   }
 
   dashboardSummary(_filter: DashboardFilter): Observable<DashboardSummary> {
@@ -53,10 +57,21 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
   }
 
   investmentSummary(investmentId: number): Observable<InvestmentSummary> {
-  return of(
-    this.investments
-      .map((inv) => ({ 
-        investmentId: inv.id,
+    return of(
+      this.investments
+        .map((inv) => ({ 
+          investmentId: inv.id,
+          saldoTotal: 0,
+          saldoDisponible: 0,
+          gananciaMes: 0,
+          promedioRentabilidadDiaria: 0,
+          aportesRetirosNetos: 0,
+          tasaMensual: 0,
+          tasaEA: 0,
+          fechaUltimoRegistro: null 
+        }))
+        .find((s) => s.investmentId === investmentId) ?? {
+        investmentId,
         saldoTotal: 0,
         saldoDisponible: 0,
         gananciaMes: 0,
@@ -64,27 +79,20 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
         aportesRetirosNetos: 0,
         tasaMensual: 0,
         tasaEA: 0,
-        fechaUltimoRegistro: null 
-      }))
-      .find((s) => s.investmentId === investmentId) ?? {
-      investmentId,
-      saldoTotal: 0,
-      saldoDisponible: 0,
-      gananciaMes: 0,
-      promedioRentabilidadDiaria: 0,
-      aportesRetirosNetos: 0,
-      tasaMensual: 0,
-      tasaEA: 0,
-      fechaUltimoRegistro: null,
-    }
-  );
-}
+        fechaUltimoRegistro: null,
+      }
+    );
+  }
 
-portfolioReference(): Observable<PortfolioReference> {
-  return of({
-    gananciaDiaria3m: 12345,
-    dias3m: 90,
-    tasaDiariaHist: 0.00123,
-  });
-}
+  portfolioReference(): Observable<PortfolioReference> {
+    return of({
+      gananciaDiaria3m: 12345,
+      dias3m: 90,
+      tasaDiariaHist: 0.00123,
+    });
+  }
+
+  lastRecord(_investmentId: number): Observable<DailyRecordDetail | null> {
+    return of(null);
+  }
 }

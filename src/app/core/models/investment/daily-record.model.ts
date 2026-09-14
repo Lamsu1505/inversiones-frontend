@@ -13,6 +13,19 @@ export interface DailyRecord {
   nota?: string;
 }
 
+export interface DailyRecordDetail {
+  id: number;
+  investmentId: number;
+  fecha: string;
+  valorUnidad: number | null;
+  cantidadUnidades: number | null;
+  saldoDisponible: number | null;
+  saldoTotal: number;
+  nota: string | null;
+  gananciaDia?: number | null;
+  variacionPct?: number | null;
+}
+
 export interface DailyStats extends DailyRecord {
   valorUnidadPrev: number | null;
   deltaUnidad: number | null;

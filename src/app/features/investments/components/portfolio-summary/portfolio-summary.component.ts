@@ -23,6 +23,8 @@ export class PortfolioSummaryComponent implements OnDestroy {
   readonly summaries = input<InvestmentSummary[] | undefined>();
   readonly reference = input<PortfolioReference | undefined>();
 
+  
+
   /** Qué tarjeta está volteada. Solo una a la vez. */
   private readonly flipped = signal<KpiId | null>(null);
   private timer?: ReturnType<typeof setTimeout>;
@@ -91,7 +93,7 @@ export class PortfolioSummaryComponent implements OnDestroy {
   // ---- Cara trasera -------------------------------------------------
 
   /** Días transcurridos del mes en curso, incluyendo hoy. */
-  private readonly diasDelMes = computed(() => new Date().getDate());
+  protected readonly diasDelMes = computed(() => new Date().getDate());
 
   /** Ganancia esperada a esta altura del mes, según los últimos 3 meses. */
   private readonly gananciaEsperada = computed(() => {
