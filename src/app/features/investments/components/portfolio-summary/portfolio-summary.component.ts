@@ -10,7 +10,7 @@ import { PercentCoPipe } from '../../../../shared/pipes/percent-co.pipe';
 /** Milisegundos que la cara trasera permanece visible sin interacción. */
 const FLIP_TIMEOUT_MS = 3000;
 
-type KpiId = 'ganancia' | 'ea';
+type KpiId = 'ganancia' | 'ea' | 'portafolio';;
 
 @Component({
   selector: 'app-portfolio-summary',
@@ -116,9 +116,20 @@ export class PortfolioSummaryComponent implements OnDestroy {
 
   /** Diferencia en puntos porcentuales (como fracción, para el pipe). */
   protected readonly deltaEA = computed(() => {
-    const actual = this.tasaEA();
-    const hist = this.eaHistorica();
-    return actual === null || hist === null ? null : actual - hist;
+      const actual = this.tasaEA();
+      const hist = this.eaHistorica();
+      return actual === null || hist === null ? null : actual - hist;
+  });
+  
+  
+  /** Crecimiento acumulado: histórico + lo del mes en curso. */
+  protected readonly gananciaTotal = computed(() => {
+    const hist = this.reference()?.gananciaHistorica;
+    const mes = this.gananciaMes();
+    console.log('hist', hist, 'mes', mes);
+
+    if (hist == null && mes === null) return null;
+    return (hist ?? 0);
   });
 
   // ---- Helpers de presentación --------------------------------------

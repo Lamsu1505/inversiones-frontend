@@ -31,6 +31,17 @@
   padding: 0;
   background: none;
   border: none;
+
+  transition: transform 0.15s ease;
+}
+
+.portfolio-summary__card--flippable:hover .portfolio-summary__face {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+}
+
+.portfolio-summary__card--flippable:active {
+  transform: scale(0.97);
 }
 
 .portfolio-summary__card--flippable:focus-visible {
@@ -64,6 +75,14 @@
   border-radius: var(--radius-lg);
 
   backface-visibility: hidden;
+}
+
+.portfolio-summary__flip-hint {
+  position: absolute;
+  top: calc(var(--spacing-unit) * 2);
+  right: calc(var(--spacing-unit) * 2);
+  color: var(--color-text-muted);
+  opacity: 0.5;
 }
 
 .portfolio-summary__face--back {

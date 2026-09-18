@@ -7,10 +7,16 @@
         {{ investment().entidad }}
       </p>
       <p class="investment-card__ea">
-        @if (summary(); as s) {
-          <span class="investment-card__ea-value">{{ s.tasaEA | percentCo }} EA</span>
+        @if (summary()?.tasaEA; as ea) {
+          <span class="investment-card__ea-value"
+                [class.investment-card__ea-value--profit]="ea > 0"
+                [class.investment-card__ea-value--loss]="ea < 0">
+            {{ ea | percentCo }} EA
+          </span>
         } @else {
-          <span class="investment-card__ea-value investment-card__ea-value--muted">— EA</span>
+          <span class="investment-card__ea-value investment-card__ea-value--muted">
+            — EA
+          </span>
         }
         <span class="investment-card__ea-label">Este mes (por ahora)</span>
       </p>
@@ -107,21 +113,17 @@
   <!-- <app-sparkline [values]="sparklineValues()" [tone]="sparklineTone()" /> -->
 
   <footer class="investment-card__footer">
-    @if (summary(); as s) {
-      <p
-        class="investment-card__updated"
-        [class.investment-card__updated--stale]="isStale()"
-        [title]="isStale() ? 'Han pasado más de 2 días desde el último registro' : ''"
-      >
-        <app-icon [name]="isStale() ? 'info' : 'history'" [size]="14" />
-        {{ s.fechaUltimoRegistro | relativeDateCo }}
-      </p>
-    } @else {
-      <p class="investment-card__updated investment-card__updated--muted">
-        <app-icon name="history" [size]="14" />
-        Sin registros aún
-      </p>
-    }
+
+    <span class="investment-card__date">
+      <app-icon name="history" [size]="14" />
+      {{ summary()?.fechaUltimoRegistro | relativeDateCo }}
+
+      @if (summary()?.gananciaHoy; as g) {
+        <span class="investment-card__today" [class]="signoClase(g)">
+          {{ g | currencyCo:true }}
+        </span>
+      }
+    </span>
 
     <div class="investment-card__actions">
       <button type="button" class="investment-card__btn investment-card__btn--primary"
@@ -131,4 +133,5 @@
       <button type="button" class="investment-card__btn">Histórico</button>
     </div>
   </footer>
+
 </article>

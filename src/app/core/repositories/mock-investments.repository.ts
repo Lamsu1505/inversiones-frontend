@@ -52,6 +52,9 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
       tasaMensual: 1.23,
       tasaEA: 17.56,
       fechaUltimoRegistro: null,
+      gananciaHoy: null,
+      tasaDiaria: null,
+      tieneRegistroHoy: false,
     }))
     );
   }
@@ -68,7 +71,10 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
           aportesRetirosNetos: 0,
           tasaMensual: 0,
           tasaEA: 0,
-          fechaUltimoRegistro: null 
+          fechaUltimoRegistro: null,
+          gananciaHoy: null,
+          tasaDiaria: null,
+          tieneRegistroHoy: false,
         }))
         .find((s) => s.investmentId === investmentId) ?? {
         investmentId,
@@ -80,15 +86,19 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
         tasaMensual: 0,
         tasaEA: 0,
         fechaUltimoRegistro: null,
+        gananciaHoy: null,
+        tasaDiaria: null,
+        tieneRegistroHoy: false,
       }
     );
   }
 
   portfolioReference(): Observable<PortfolioReference> {
     return of({
-      gananciaDiaria3m: 12345,
-      dias3m: 90,
-      tasaDiariaHist: 0.00123,
+      gananciaDiaria3m: 0,
+      dias3m: 0,
+      tasaDiariaHist: 0,
+      gananciaHistorica: 0,   // ← agregar
     });
   }
 

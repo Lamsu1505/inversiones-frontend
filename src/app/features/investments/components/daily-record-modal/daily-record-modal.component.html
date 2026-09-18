@@ -25,10 +25,10 @@
           (input)="onAnyInput()">
 
       <div class="modal__date-row">
-        <label class="modal__date-label" for="fecha">Fecha de registro:</label>
+        <label class="modal__date-label" for="fecha">Fecha del nuevo registro:</label>
         <div class="modal__date-field">
           <app-icon name="history" [size]="15" />
-          <input id="fecha" type="date" formControlName="fecha" [max]="hoy" />
+          <input id="fecha" type="date" formControlName="fecha" [max]="hoy" readonly/>
           @if (esHoy()) { <span class="modal__badge modal__badge--today">Hoy</span> }
         </div>
       </div>
@@ -155,14 +155,20 @@
       }
 
       <footer class="modal__footer">
-        <button type="button" class="btn btn--ghost" (click)="cerrar.emit()">
-          Cancelar
-        </button>
-        <button type="submit" class="btn btn--primary"
-                [disabled]="fechaDuplicada() || guardando()">
-          <app-icon name="plus" [size]="14" />
-          {{ guardando() ? 'Guardando…' : 'Guardar día' }}
-        </button>
+        @if (resultado()) {
+          <button type="button" class="btn btn--primary" (click)="cerrar.emit()">
+            Listo
+          </button>
+        } @else {
+          <button type="button" class="btn btn--ghost" (click)="cerrar.emit()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn--primary"
+                  [disabled]="fechaDuplicada() || guardando()">
+            <app-icon name="plus" [size]="14" />
+            {{ guardando() ? 'Guardando…' : 'Guardar día' }}
+          </button>
+        }
       </footer>
 
     </form>

@@ -12,6 +12,7 @@ import { PortfolioSummaryComponent } from '../components/portfolio-summary/portf
 import { DailyRecordInput } from '../../../core/models/investment/daily-record-form.model';
 import { DailyRecordModalComponent } from '../components/daily-record-modal/daily-record-modal.component';
 import { DailyRecordResult } from '../../../core/models/investment/daily-record-result.model';
+import { TodayBarComponent } from '../components/today-bar/today-bar.component';
 
 
 type StatusFilter = 'activas' | 'inactivas' | 'todas';
@@ -19,7 +20,7 @@ type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
 
 @Component({
   selector: 'app-investments',
-  imports: [InvestmentCardComponent, IconComponent, PortfolioSummaryComponent, DailyRecordModalComponent],
+  imports: [InvestmentCardComponent, IconComponent, PortfolioSummaryComponent, DailyRecordModalComponent, TodayBarComponent],
   templateUrl: './investments.component.html',
   styleUrl: './investments.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +33,8 @@ export class InvestmentsComponent {
   protected readonly referenceRes = rxResource({
     stream: () => this.repository.portfolioReference(),
   });
+
+  
 
   protected readonly investmentsRes = rxResource({
     stream: () => this.repository.list(),
@@ -114,6 +117,11 @@ export class InvestmentsComponent {
   protected readonly inactiveCount = computed(() => this.investments().filter((i) => !i.activa).length);
   protected readonly totalCount = computed(() => this.investments().length);
 
+  protected scrollATarjeta(investmentId: number): void {
+    document
+      .querySelector(`[data-investment-id="${investmentId}"]`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 
   protected readonly errorGuardar = signal<string | null>(null);
   protected readonly modalInvestment = signal<Investment | null>(null);

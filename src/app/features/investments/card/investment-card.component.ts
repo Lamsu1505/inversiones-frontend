@@ -30,6 +30,13 @@ export class InvestmentCardComponent {
     return tipo ? INVESTMENT_TIPO_LABELS[tipo] : null;
   });
 
+  protected signoClase(valor: number | null | undefined): string {
+    if (valor == null) return 'is-empty';
+    if (valor > 0) return 'is-profit';
+    if (valor < 0) return 'is-loss';
+    return '';
+  }
+
   protected readonly isStale = computed(() => {
     const fecha = this.summary()?.fechaUltimoRegistro;
     if (!fecha) return false;

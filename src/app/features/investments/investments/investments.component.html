@@ -37,8 +37,6 @@
 </div>
 
 
-
-
 @if (isLoading()) {
   <p class="investments__status">Cargando inversiones…</p>
 } @else if (loadError(); as mensaje) {
@@ -53,6 +51,11 @@
     </button>
   </div>
 } @else {
+
+  <app-today-bar
+  [investments]="visibleInvestments()"
+  [summaries]="summariesRes.hasValue() ? summariesRes.value() : undefined"
+  (irA)="scrollATarjeta($event)" />
 
   <app-portfolio-summary
   [summaries]="summariesRes.hasValue() ? summariesRes.value() : undefined"
@@ -76,6 +79,7 @@
   <div class="investments__grid">
   @for (inv of visibleInvestments(); track inv.id) {
     <app-investment-card
+      [attr.data-investment-id]="inv.id"
       [investment]="inv"
       [summary]="summaryById().get(inv.id)"
       (agregarDia)="abrirModal($event)" />

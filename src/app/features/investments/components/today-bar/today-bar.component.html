@@ -1,0 +1,44 @@
+<section class="today-bar" aria-label="Estado del registro de hoy">
+
+  <div class="today-bar__left">
+    <span class="today-bar__badge" [class.today-bar__badge--done]="completo()">
+      <span class="today-bar__dot"></span> Hoy
+    </span>
+
+    <span class="today-bar__date">
+      <app-icon name="history" [size]="15" />
+      {{ fechaHoy() }}
+    </span>
+
+    @if (gananciaHoy(); as g) {
+      <span class="today-bar__divider"></span>
+      <span class="today-bar__gain-block">
+        <span class="today-bar__gain-label">Rendimiento hoy</span>
+        <span class="today-bar__gain" [class]="signoClase(g)">
+          {{ g | currencyCo:true }}
+        </span>
+      </span>
+    }
+  </div>
+
+  <div class="today-bar__right">
+    <div class="today-bar__progress-block">
+      <span class="today-bar__count">
+        {{ registradas() }} de {{ total() }} inversiones al día
+      </span>
+      <span class="today-bar__track">
+        <span class="today-bar__fill" [style.width.%]="progresoPct()"></span>
+      </span>
+    </div>
+
+    <span class="today-bar__pct">{{ progresoPct() }}%</span>
+
+    @if (!completo()) {
+      <button type="button" class="today-bar__cta" (click)="onIr()">
+        Completar registro
+        <app-icon name="arrow-up" [size]="14" />
+      </button>
+    }
+  </div>
+
+</section>

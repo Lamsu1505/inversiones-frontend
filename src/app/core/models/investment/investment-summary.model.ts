@@ -7,5 +7,7 @@ export interface InvestmentSummary {
   aportesRetirosNetos: number;          // suma de movimientos del mes; + aporte, - retiro
   tasaMensual: number | null;                  // %, ej. 0.72 = 0,72%
   tasaEA: number | null;                       // %
-  fechaUltimoRegistro: string | null;   // 'YYYY-MM-DD' — null si aún no hay ningún registro
+  fechaUltimoRegistro: string | null;
+  gananciaHoy: number | null;
+  tieneRegistroHoy: boolean;   
 }

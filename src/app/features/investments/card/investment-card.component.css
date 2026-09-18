@@ -240,6 +240,28 @@
   font-weight: 600;
 }
 
+.investment-card__date {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.investment-card__today {
+  margin-left: calc(var(--spacing-unit) * 2);
+  font-weight: 700;
+}
+
+.investment-card__ea-value--profit { color: var(--color-profit); }
+.investment-card__ea-value--loss   { color: var(--color-loss); }
+.investment-card__ea-value--muted  {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
 .investment-card__value--profit { color: var(--color-profit); }
 .investment-card__value--loss { color: var(--color-loss); }
 
