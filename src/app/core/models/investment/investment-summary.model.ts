@@ -10,4 +10,5 @@ export interface InvestmentSummary {
   fechaUltimoRegistro: string | null;
   gananciaHoy: number | null;
   tieneRegistroHoy: boolean;   
+  saldoPromedioMes: number | null;
 }

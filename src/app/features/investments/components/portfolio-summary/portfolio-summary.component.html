@@ -15,7 +15,7 @@
           [class.portfolio-summary__value--empty]="saldoTotal() === null">
           {{ saldoTotal() | currencyCo }}
         </span>
-        <span class="portfolio-summary__hint">Saldo total</span>
+        <span class="portfolio-summary__hint">Saldo total, promedio {{ promedioPosesion() | currencyCo }}</span>
       </span>
 
       <span class="portfolio-summary__face portfolio-summary__face--back">
@@ -24,8 +24,10 @@
           Portafolio
         </span>
         <span class="portfolio-summary__value portfolio-summary__value--hero" [class]="signoClase(gananciaTotal())">
-          {{ gananciaTotal() | currencyCo:true }}
+          {{ crecimientoTotal() | currencyCo: true }}
         </span>
+        <span class="portfolio-summary__hint">Ganancia total del portafolio</span>
+
       </span>
 
     </span>

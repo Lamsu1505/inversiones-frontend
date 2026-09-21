@@ -49,6 +49,16 @@ export class PortfolioSummaryComponent implements OnDestroy {
     clearTimeout(this.timer);
   }
 
+
+  /** Ganancia desde la apertura: meses cerrados (vista) + mes en curso. */
+  protected readonly crecimientoTotal = computed<number | null>(() => {
+    const historica = this.reference()?.gananciaHistorica ?? null;
+    const mes = this.gananciaMes();
+
+    if (historica === null && mes === null) return null;
+    return (historica ?? 0) + (mes ?? 0);
+  });
+
   // ---- Cara frontal -------------------------------------------------
 
   private readonly conDatos = computed(() =>
@@ -77,13 +87,20 @@ export class PortfolioSummaryComponent implements OnDestroy {
       : null;
   });
 
-  /** Tasa mensual del portafolio: ganancia total / saldo total. Fracción. */
-  protected readonly tasaMensual = computed(() => {
-    const ganancia = this.gananciaMes();
-    if (ganancia === null) return null;
-    const saldo = this.conDatos().reduce((acc, s) => acc + (s.saldoTotal ?? 0), 0);
-    return saldo > 0 ? ganancia / saldo : null;
+  /** Promedio de posesión del mes: suma de saldos promedio ponderados por días. */
+  protected readonly promedioPosesion = computed<number | null>(() => {
+    const conSaldo = (this.summaries() ?? []).filter((s) => s.saldoPromedioMes !== null);
+    if (conSaldo.length === 0) return null;
+    return conSaldo.reduce((acc, s) => acc + s.saldoPromedioMes!, 0);
   });
+
+  /** Tasa mensual del portafolio: ganancia total / suma de saldos promedio del mes. Fracción. */
+    protected readonly tasaMensual = computed(() => {
+      const ganancia = this.gananciaMes();
+      if (ganancia === null) return null;
+      const saldo = this.conDatos().reduce((acc, s) => acc + (s.saldoPromedioMes ?? 0), 0);
+      return saldo > 0 ? ganancia / saldo : null;
+    });
 
   protected readonly tasaEA = computed(() => {
     const mensual = this.tasaMensual();

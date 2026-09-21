@@ -55,6 +55,7 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
       gananciaHoy: null,
       tasaDiaria: null,
       tieneRegistroHoy: false,
+      saldoPromedioMes: 110000000,
     }))
     );
   }
@@ -75,6 +76,7 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
           gananciaHoy: null,
           tasaDiaria: null,
           tieneRegistroHoy: false,
+          saldoPromedioMes: null,
         }))
         .find((s) => s.investmentId === investmentId) ?? {
         investmentId,
@@ -89,6 +91,7 @@ export class MockInvestmentsRepository implements InvestmentsRepository {
         gananciaHoy: null,
         tasaDiaria: null,
         tieneRegistroHoy: false,
+        saldoPromedioMes: null, 
       }
     );
   }

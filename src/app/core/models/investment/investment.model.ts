@@ -10,7 +10,7 @@ export interface Investment {
   tipo?: InvestmentTipo;
   moneda: string;
   activa: boolean;
-  fechaCreacion: string;
+  fechaApertura: string;
   rastreaValorUnidad: boolean;
   rastreaSaldoDisponible: boolean;
 }
