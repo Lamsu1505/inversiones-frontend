@@ -1,0 +1,58 @@
+<div class="modal__backdrop" (click)="onBackdrop($event)"
+     (keydown.escape)="onEscape()" tabindex="-1">
+  <div class="modal" role="alertdialog" aria-modal="true"
+       aria-labelledby="baja-nombre" aria-describedby="baja-detalle">
+
+    <header class="modal__header">
+      <div class="modal__title-block">
+        <p class="modal__eyebrow">Dar de baja</p>
+        <h2 class="modal__name" id="baja-nombre">{{ investment().nombre }}</h2>
+        @if (investment().entidad; as entidad) {
+          <p class="modal__entity">{{ entidad }}</p>
+        }
+      </div>
+      <button type="button" class="modal__close" aria-label="Cerrar"
+              (click)="cerrar.emit()">
+        <app-icon name="plus" [size]="18" />
+      </button>
+    </header>
+
+    <div class="modal__fields" id="baja-detalle">
+      @if (saldoActual(); as saldo) {
+        @if (saldo > 0) {
+          <p class="confirm__warning">
+            <app-icon name="info" [size]="16" />
+            <span>
+              Todavía tiene un saldo de <strong>{{ saldo | currencyCo }}</strong>.
+              Si la das de baja, ese saldo sigue contando en el total del portafolio.
+            </span>
+          </p>
+        }
+      }
+
+      <p class="confirm__lead">Al darla de baja:</p>
+      <ul class="confirm__list">
+        <li>Deja de aparecer en <strong>Activas</strong> y no cuenta en la barra de <strong>Hoy</strong>.</li>
+        <li>No podrás añadir días ni movimientos.</li>
+        <li>Su historial y su ganancia se conservan.</li>
+        <li>Puedes reactivarla cuando quieras desde el menú de la tarjeta.</li>
+      </ul>
+    </div>
+
+    @if (error(); as mensaje) {
+      <p class="modal__save-error" role="alert">{{ mensaje }}</p>
+    }
+
+    <footer class="modal__footer">
+      <button type="button" class="btn btn--ghost" (click)="cerrar.emit()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn--danger" [disabled]="guardando()"
+        (click)="confirmar()">
+        <app-icon name="archive" [size]="14" />
+        {{ guardando() ? 'Dando de baja…' : 'Dar de baja' }}
+      </button>
+    </footer>
+
+  </div>
+</div>

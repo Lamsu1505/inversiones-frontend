@@ -511,3 +511,22 @@
 .investment-card__updated--muted {
   color: var(--color-text-muted);
 }
+
+
+/* ── Inversión dada de baja ──
+   Se atenúan solo las partes informativas. La etiqueta "Inactiva", el
+   menú ⋮ y el botón Histórico quedan intactos porque siguen funcionando.
+   (Un opacity en toda la tarjeta también apagaría el menú desplegable:
+   un hijo nunca puede ser más opaco que su padre.) */
+
+.investment-card--inactive {
+  background: color-mix(in srgb, var(--color-surface) 55%, var(--color-bg));
+  border-style: dashed;
+}
+
+.investment-card--inactive .investment-card__title-block,
+.investment-card--inactive .investment-card__row,
+.investment-card--inactive .investment-card__date {
+  opacity: 0.55;
+  filter: grayscale(0.8);    /* verdes y rojos apagados: ya no son "noticia" */
+}

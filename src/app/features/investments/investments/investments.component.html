@@ -75,6 +75,10 @@
   <p class="investments__empty">No se encontraron inversiones con ese criterio.</p>
 }
 
+  @if (errorEstado(); as mensaje) {
+    <p class="investments__warning" role="alert">{{ mensaje }}</p>
+  }
+
   <!-- aquí va tu grilla existente, sin cambios -->
   <div class="investments__grid">
   @for (inv of visibleInvestments(); track inv.id) {
@@ -84,7 +88,9 @@
       [investment]="inv"
       [summary]="summaryById().get(inv.id)"
       (editar)="abrirEdicion($event)"
-      (agregarDia)="abrirModal($event)" />
+      (agregarDia)="abrirModal($event)" 
+      (darDeBaja)="abrirBaja($event)"
+      (reactivar)="reactivarInversion($event)"/>
   }
 
   @if (modalMovimiento(); as inv) {
@@ -119,5 +125,14 @@
     [errorGuardar]="errorGuardar()"
     (cerrar)="cerrarModal()"
     (guardar)="onGuardarDia($event)" />
+}
+
+@if (bajaModal(); as inv) {
+  <app-deactivate-modal
+    [investment]="inv"
+    [saldoActual]="summaryById().get(inv.id)?.saldoTotal ?? null"
+    (cerrar)="cerrarBaja()"
+    (confirmado)="onEstadoCambiado()"
+  />
 }
 

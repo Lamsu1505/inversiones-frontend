@@ -23,6 +23,8 @@ export class InvestmentCardComponent {
   readonly investment = input.required<Investment>();
   readonly summary = input<InvestmentSummary | undefined>();
 
+  readonly reactivar = output<Investment>();
+
   private readonly repository = inject(InvestmentsRepository);
 
   protected readonly tipoLabel = computed(() => {
@@ -107,13 +109,14 @@ export class InvestmentCardComponent {
     this.menuAbierto.update((abierto) => !abierto);
   }
 
-  protected elegir(accion: 'movimiento' | 'editar' | 'darDeBaja'): void {
+  protected elegir(accion: 'movimiento' | 'editar' | 'darDeBaja' | 'reactivar'): void {
     this.menuAbierto.set(false);
     const inv = this.investment();
     switch (accion) {
       case 'movimiento': this.movimiento.emit(inv); break;
       case 'editar':     this.editar.emit(inv); break;
       case 'darDeBaja':  this.darDeBaja.emit(inv); break;
+      case 'reactivar':  this.reactivar.emit(inv); break;
     }
   }
 

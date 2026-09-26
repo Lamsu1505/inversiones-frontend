@@ -1,4 +1,4 @@
-<article class="investment-card">
+<article class="investment-card" [class.investment-card--inactive]="!investment().activa">
   <header class="investment-card__header">
     <div class="investment-card__title-block">
       <h3 class="investment-card__name">{{ investment().nombre }}</h3>
@@ -23,27 +23,38 @@
 
     <div class="investment-card__header-actions">
       <div class="investment-card__menu-wrap" #menuWrap>
-        <button type="button" class="TU-CLASE-ACTUAL" aria-label="Más acciones" aria-haspopup="menu"
-          [attr.aria-expanded]="menuAbierto()" (click)="toggleMenu()">
+        <button type="button" aria-label="Más acciones" aria-haspopup="menu" [attr.aria-expanded]="menuAbierto()"
+          (click)="toggleMenu()">
           <app-icon name="more-vertical" [size]="18" />
         </button>
 
         @if (menuAbierto()) {
-          <div class="investment-card__menu" role="menu">
-            <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('movimiento')">
-              <app-icon name="swap" [size]="16" />
-              Movimiento
-            </button>
-            <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('editar')">
-              <app-icon name="edit" [size]="16" />
-              Editar inversión
-            </button>
-            <div class="investment-card__menu-sep" role="separator"></div>
-            <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('darDeBaja')">
-              <app-icon name="archive" [size]="16" />
-              Dar de baja
-            </button>
-          </div>
+        <div class="investment-card__menu" role="menu">
+          @if (investment().activa) {
+          <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('movimiento')">
+            <app-icon name="swap" [size]="16" />
+            Movimiento
+          </button>
+          }
+          <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('editar')">
+            <app-icon name="edit" [size]="16" />
+            Editar inversión
+          </button>
+
+          <div class="investment-card__menu-sep" role="separator"></div>
+
+          @if (investment().activa) {
+          <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('darDeBaja')">
+            <app-icon name="archive" [size]="16" />
+            Dar de baja
+          </button>
+          } @else {
+          <button type="button" role="menuitem" class="investment-card__menu-item" (click)="elegir('reactivar')">
+            <app-icon name="restore" [size]="16" />
+            Reactivar
+          </button>
+          }
+        </div>
         }
       </div>
     </div>
@@ -144,10 +155,13 @@
     </span>
 
     <div class="investment-card__actions">
+      @if (investment().activa) {
       <button type="button" class="investment-card__btn investment-card__btn--primary"
         (click)="agregarDia.emit(investment())">
         <app-icon name="plus" [size]="14" /> Añadir Día
       </button>
+      }
+      
       <button type="button" class="investment-card__btn">Histórico</button>
     </div>
   </footer>

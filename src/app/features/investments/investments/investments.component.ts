@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { InvestmentsRepository } from '../../../core/repositories/investments.repository';
 import { Investment } from '../../../core/models/investment/investment.model';
@@ -15,6 +15,7 @@ import { DailyRecordResult } from '../../../core/models/investment/daily-record-
 import { TodayBarComponent } from '../components/today-bar/today-bar.component';
 import { MovementModalComponent } from '../components/movement-modal/movement-modal.component';
 import { InvestmentFormModalComponent } from '../components/investment-form-modal/investment-form-modal';
+import { DeactivateModalComponent } from '../components/deactivate-modal/deactivate-modal.component';
 
 
 type StatusFilter = 'activas' | 'inactivas' | 'todas';
@@ -24,7 +25,7 @@ type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
   selector: 'app-investments',
   imports: [InvestmentCardComponent, IconComponent, PortfolioSummaryComponent, 
     DailyRecordModalComponent, TodayBarComponent, MovementModalComponent, 
-    InvestmentFormModalComponent, CurrencyCoPipe],
+    InvestmentFormModalComponent, CurrencyCoPipe, DeactivateModalComponent],
   templateUrl: './investments.component.html',
   styleUrl: './investments.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -142,6 +143,40 @@ export class InvestmentsComponent {
     }
     return map;
   });
+
+
+  private readonly destroyRef = inject(DestroyRef);   // si todavía no lo tienes
+
+  protected readonly bajaModal = signal<Investment | null>(null);
+  protected readonly errorEstado = signal<string | null>(null);
+
+  protected abrirBaja(inv: Investment): void {
+    this.bajaModal.set(inv);
+  }
+
+  protected cerrarBaja(): void {
+    this.bajaModal.set(null);
+  }
+
+  /** Tras dar de baja o reactivar: cambia la lista, los resúmenes y el portafolio. */
+  protected onEstadoCambiado(): void {
+    this.bajaModal.set(null);
+    this.errorEstado.set(null);
+    this.investmentsRes.reload();
+    this.summariesRes.reload();
+    this.referenceRes.reload();
+  }
+
+  protected reactivarInversion(inv: Investment): void {
+    this.errorEstado.set(null);
+    this.repository
+      .changeInvestmentStatus(inv.id, true)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.onEstadoCambiado(),
+        error: (err) => this.errorEstado.set(toUserMessage(err)),
+      });
+  }
 
   // ── Estado de la UI: filtro, búsqueda, orden ──────────────────────────
 

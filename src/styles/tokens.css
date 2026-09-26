@@ -54,6 +54,11 @@
     --color-popover: #ffffff;
   --shadow-popover: 0 4px 8px -2px rgb(16 24 20 / 0.08),
                     0 12px 28px -6px rgb(16 24 20 / 0.16);
+
+
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-on-danger: #ffffff;
 }
 
 [data-theme='dark'] {

@@ -339,6 +339,25 @@
 
 .btn--ghost:hover { background-color: var(--color-surface-hover); }
 
+
+.btn--danger {
+  background-color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  color: var(--color-on-danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background-color: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+.btn--danger:focus-visible {
+  outline: 2px solid var(--color-danger);
+  outline-offset: 2px;
+}
+
+.btn--danger:disabled { opacity: 0.45; cursor: not-allowed; }
+
 /* ── Responsive: encoger, no reapilar (principio #21).
    Umbral 400px contra minmax(150px) de la fila de unidades:
    la grilla nunca produce columnas por debajo de 150px. ── */

@@ -1,0 +1,51 @@
+/* Confirmación de "Dar de baja". La base viene de shared/styles/modal.css. */
+
+.modal { max-width: 480px; }   /* más angosto: es solo una confirmación */
+
+.modal__fields {
+  gap: calc(var(--spacing-unit) * 3);
+  border-top: 1px solid var(--color-border);
+}
+
+.confirm__lead {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.confirm__list {
+  display: grid;
+  gap: calc(var(--spacing-unit) * 1.5);
+  margin: 0;
+  padding-left: 1.1em;
+
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.confirm__list strong { color: var(--color-text-primary); }
+
+.confirm__warning {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 2.5);
+  margin: 0;
+  padding: calc(var(--spacing-unit) * 3);
+
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--color-text-primary);
+
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.confirm__warning app-icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--color-text-secondary);
+}

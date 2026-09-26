@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, input } from '@angular/core';
+import { CurrencyMaskDirective } from '../../directives/currency-mask.directive';
 
 export type IconName =
   | 'chart'
@@ -24,6 +25,7 @@ export type IconName =
   | 'edit'
   | 'archive'
   | 'trash'
+  | 'restore'
   ;
 
 @Component({
@@ -31,6 +33,7 @@ export type IconName =
   templateUrl: './icon.component.html',
   styleUrl: './icon.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CurrencyMaskDirective],
 })
 export class IconComponent {
   name = input.required<IconName>();
