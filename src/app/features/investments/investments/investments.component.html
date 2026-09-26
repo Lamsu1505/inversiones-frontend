@@ -79,15 +79,35 @@
   <div class="investments__grid">
   @for (inv of visibleInvestments(); track inv.id) {
     <app-investment-card
+      (movimiento)="abrirModalMovimiento($event)"
       [attr.data-investment-id]="inv.id"
       [investment]="inv"
       [summary]="summaryById().get(inv.id)"
+      (editar)="abrirEdicion($event)"
       (agregarDia)="abrirModal($event)" />
   }
+
+  @if (modalMovimiento(); as inv) {
+    <app-movement-modal
+      [investment]="inv"
+      (cerrar)="cerrarModalMovimiento()"
+      (cambio)="onCambioMovimiento()"
+    />
+  }
   <button type="button" class="investments__ghost-card" (click)="createInvestment()">
-    ...
+    <app-icon name="plus" [size]="18"  />
+    Crear nueva inversión...
   </button>
+  
 </div>
+}
+
+@if (formModal(); as modo) {
+  <app-investment-form-modal
+    [investment]="modo === 'crear' ? null : modo"
+    (cerrar)="cerrarFormModal()"
+    (guardado)="onInversionGuardada()"
+  />
 }
 
 

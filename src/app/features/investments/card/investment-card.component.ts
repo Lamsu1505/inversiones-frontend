@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, input, output, signal, viewChild } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CurrencyCoPipe } from '../../../shared/pipes/currency-co.pipe';
 import { PercentCoPipe } from '../../../shared/pipes/percent-co.pipe';
@@ -92,4 +92,44 @@ export class InvestmentCardComponent {
   //   if (last < first) return 'loss';
   //   return 'neutral';
   // });
+
+
+  /** Contenedor del botón ⋮ y su menú, para detectar clics fuera. */
+  private readonly menuWrap = viewChild<ElementRef<HTMLElement>>('menuWrap');
+
+  protected readonly menuAbierto = signal(false);
+
+  readonly movimiento = output<Investment>();
+  readonly editar = output<Investment>();
+  readonly darDeBaja = output<Investment>();
+
+  protected toggleMenu(): void {
+    this.menuAbierto.update((abierto) => !abierto);
+  }
+
+  protected elegir(accion: 'movimiento' | 'editar' | 'darDeBaja'): void {
+    this.menuAbierto.set(false);
+    const inv = this.investment();
+    switch (accion) {
+      case 'movimiento': this.movimiento.emit(inv); break;
+      case 'editar':     this.editar.emit(inv); break;
+      case 'darDeBaja':  this.darDeBaja.emit(inv); break;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  protected onDocumentClick(event: MouseEvent): void {
+    if (!this.menuAbierto()) return;
+    const wrap = this.menuWrap()?.nativeElement;
+    if (wrap && !wrap.contains(event.target as Node)) {
+      this.menuAbierto.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+    protected onEscape(): void {
+      this.menuAbierto.set(false);
+    }
+
+    
 }

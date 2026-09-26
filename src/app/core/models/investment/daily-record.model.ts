@@ -24,6 +24,7 @@ export interface DailyRecordDetail {
   nota: string | null;
   gananciaDia?: number | null;
   variacionPct?: number | null;
+  movimientosPendientes?: number | null; 
 }
 
 export interface DailyStats extends DailyRecord {

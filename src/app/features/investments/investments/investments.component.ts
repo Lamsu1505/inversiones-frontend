@@ -13,6 +13,8 @@ import { DailyRecordInput } from '../../../core/models/investment/daily-record-f
 import { DailyRecordModalComponent } from '../components/daily-record-modal/daily-record-modal.component';
 import { DailyRecordResult } from '../../../core/models/investment/daily-record-result.model';
 import { TodayBarComponent } from '../components/today-bar/today-bar.component';
+import { MovementModalComponent } from '../components/movement-modal/movement-modal.component';
+import { InvestmentFormModalComponent } from '../components/investment-form-modal/investment-form-modal';
 
 
 type StatusFilter = 'activas' | 'inactivas' | 'todas';
@@ -20,7 +22,9 @@ type SortOption = 'nombre' | 'saldo' | 'rentabilidad' | 'actualizacion';
 
 @Component({
   selector: 'app-investments',
-  imports: [InvestmentCardComponent, IconComponent, PortfolioSummaryComponent, DailyRecordModalComponent, TodayBarComponent],
+  imports: [InvestmentCardComponent, IconComponent, PortfolioSummaryComponent, 
+    DailyRecordModalComponent, TodayBarComponent, MovementModalComponent, 
+    InvestmentFormModalComponent, CurrencyCoPipe],
   templateUrl: './investments.component.html',
   styleUrl: './investments.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +38,38 @@ export class InvestmentsComponent {
     stream: () => this.repository.portfolioReference(),
   });
 
+  protected readonly modalMovimiento = signal<Investment | null>(null);
+
+  protected abrirModalMovimiento(inv: Investment): void {
+    this.modalMovimiento.set(inv);
+  }
+
+  protected cerrarModalMovimiento(): void {
+    this.modalMovimiento.set(null);
+  }
+
+  protected onCambioMovimiento(): void {
+    this.summariesRes.reload();
+    this.referenceRes.reload();
+  }
+
+  /** 'crear' = modal vacío; una inversión = editarla; null = cerrado. */
+  protected readonly formModal = signal<'crear' | Investment | null>(null);
+
+  protected abrirEdicion(inv: Investment): void {
+    this.formModal.set(inv);
+  }
+
+  protected cerrarFormModal(): void {
+    this.formModal.set(null);
+  }
+
+  protected onInversionGuardada(): void {
+    this.formModal.set(null);
+    this.investmentsRes.reload();
+    this.summariesRes.reload();
+    this.referenceRes.reload();
+  }
   
 
   protected readonly investmentsRes = rxResource({
@@ -215,7 +251,7 @@ export class InvestmentsComponent {
   }
 
   protected createInvestment(): void {
-    console.log('Abrir modal de nueva inversión — pendiente');
+    this.formModal.set('crear');
   }
 
   private compare(a: Investment, b: Investment, summariesById: Map<number, InvestmentSummary>): number {

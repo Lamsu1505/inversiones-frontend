@@ -25,7 +25,7 @@ const NOTA_MAX = 120;
     CurrencyCoPipe, PercentCoPipe,
   ],
   templateUrl: './daily-record-modal.component.html',
-  styleUrl: './daily-record-modal.component.css',
+  styleUrls: ['../../../../shared/styles/modal.css', './daily-record-modal.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DailyRecordModalComponent {
@@ -111,9 +111,13 @@ export class DailyRecordModalComponent {
 
   private readonly valores = signal(this.form.getRawValue());
 
-  protected readonly deltaSaldoTotal = computed(() =>
-    this.delta(this.valores().saldoTotal, this.last()?.saldoTotal),
-  );
+  protected readonly deltaSaldoTotal = computed(() => {
+    const last = this.last();
+    // Saldo esperado sin rendimiento: el anterior más los movimientos que se
+    // descuentan en este registro. El delta contra esto es solo rendimiento.
+    const base = last ? last.saldoTotal + (last.movimientosPendientes ?? 0) : undefined;
+    return this.delta(this.valores().saldoTotal, base);
+  });
 
   protected readonly deltaSaldoDisponible = computed(() =>
     this.delta(this.valores().saldoDisponible, this.last()?.saldoDisponible),

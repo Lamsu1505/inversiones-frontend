@@ -9,6 +9,8 @@ import { InvestmentSummary } from '../models/investment/investment-summary.model
 import { DailyRecordDetail, DailyStats } from '../models/investment/daily-record.model';
 import { PortfolioReference } from '../models/portfolio-reference.model';
 import { DailyRecordInput } from '../models/investment/daily-record-form.model';
+import { Movement, MovementInput } from '../models/investment/movement.model';
+import { EditConstraints, InvestmentInput, InvestmentTypeOption } from '../models/investment/investment-form.model';
 
 @Injectable()
 export class HttpInvestmentsRepository extends InvestmentsRepository {
@@ -56,5 +58,39 @@ export class HttpInvestmentsRepository extends InvestmentsRepository {
     return this.http.get<DailyRecordDetail | null>(
       `${this.baseUrl}/investments/${investmentId}/records/last`
     );
+  }
+
+  createMovement(investmentId: number, input: MovementInput): Observable<Movement> {
+    return this.http.post<Movement>(
+      `${this.baseUrl}/investments/${investmentId}/movements`, input);
+  }
+  
+  recentMovements(investmentId: number): Observable<Movement[]> {
+    return this.http.get<Movement[]>(
+      `${this.baseUrl}/investments/${investmentId}/movements/recent`);
+  }
+
+  deleteMovement(movementId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/movements/${movementId}`);
+  }
+
+  investmentTypes(): Observable<InvestmentTypeOption[]> {
+    return this.http.get<InvestmentTypeOption[]>(`${this.baseUrl}/investment-types`);
+  }
+
+  createInvestment(input: InvestmentInput): Observable<Investment> {
+    return this.http.post<Investment>(`${this.baseUrl}/investments`, input);
+  }
+
+  updateInvestment(id: number, input: InvestmentInput): Observable<Investment> {
+    return this.http.put<Investment>(`${this.baseUrl}/investments/${id}`, input);
+  }
+
+  changeInvestmentStatus(id: number, activa: boolean): Observable<Investment> {
+    return this.http.patch<Investment>(`${this.baseUrl}/investments/${id}/status`, { activa });
+  }
+
+  editConstraints(id: number): Observable<EditConstraints> {
+    return this.http.get<EditConstraints>(`${this.baseUrl}/investments/${id}/edit-constraints`);
   }
 }

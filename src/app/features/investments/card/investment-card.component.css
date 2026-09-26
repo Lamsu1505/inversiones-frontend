@@ -196,6 +196,118 @@
   margin: 0;
 }
 
+/* ---------- Botón ⋮ ---------- */
+.investment-card__menu-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+/* Más específico que la clase propia del botón, así que la sobrescribe. */
+.investment-card__menu-wrap > button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;              /* evita el gris nativo del navegador */
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.investment-card__menu-wrap > button:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.investment-card__menu-wrap > button[aria-expanded='true'] {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.investment-card__menu-wrap > button:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Menú ---------- */
+.investment-card__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 10;
+  min-width: 200px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--color-popover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-popover);
+  transform-origin: top right;
+  animation: investment-card-menu-in 120ms ease-out;
+}
+
+@keyframes investment-card-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+.investment-card__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.investment-card__menu-item app-icon {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  transition: color 120ms ease;
+}
+
+/* Hover que funciona en los dos temas: mezcla un poco del color del texto
+   sobre el fondo, así en claro oscurece y en oscuro aclara. */
+.investment-card__menu-item:hover,
+.investment-card__menu-item:focus-visible {
+  background: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+  outline: none;
+}
+
+.investment-card__menu-item:hover app-icon,
+.investment-card__menu-item:focus-visible app-icon {
+  color: var(--color-text-primary);
+}
+
+.investment-card__menu-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--color-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .investment-card__menu {
+    animation: none;
+  }
+}
+
 /* --- Filas de métricas --- */
 .investment-card__row {
   display: grid;

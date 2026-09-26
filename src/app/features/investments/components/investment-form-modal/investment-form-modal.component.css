@@ -1,0 +1,121 @@
+/* Estilos propios del modal de inversión (crear y editar). La base viene
+   de shared/styles/modal.css. */
+
+/* Este modal no tiene fila de fecha arriba: la línea que separa el header
+   del cuerpo va aquí. */
+.modal__fields { border-top: 1px solid var(--color-border); }
+
+.field__hint {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Selects ── */
+
+.field__wrap--select { position: relative; }
+
+.field__select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 calc(var(--spacing-unit) * 9) 0 calc(var(--spacing-unit) * 3);
+
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-primary);
+
+  background: none;
+  border: none;
+  outline: none;
+  appearance: none;          /* quita la flecha nativa; va la nuestra */
+  cursor: pointer;
+}
+
+/* La lista desplegable nativa también respeta el tema (en Chrome). */
+.field__select option {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+}
+
+.field__chevron {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--spacing-unit) * 3);
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;      /* el clic pasa al select */
+}
+
+/* ── Campo bloqueado (la moneda al editar) ── */
+
+.field__wrap:has(:disabled) {
+  background-color: color-mix(in srgb, var(--color-text-primary) 4%, var(--color-surface));
+}
+
+.field__wrap :disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+/* ── Casillas "qué reporta la entidad" ── */
+
+.toggles {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 3);
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--color-surface);
+  cursor: pointer;
+}
+
+.toggle + .toggle { border-top: 1px solid var(--color-border); }
+
+.toggle input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.toggle__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.toggle__title {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.toggle__hint {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.toggle--locked,
+.toggle--locked input { cursor: not-allowed; }
+
+.toggle--locked .toggle__hint { color: var(--color-text-secondary); }
+
+/* ── Responsive: mismo umbral que la base ── */
+
+@container modal (max-width: 400px) {
+  .field__select { min-height: 44px; }
+}

@@ -50,6 +50,10 @@
   --row-height: 40px;
   --row-height-compact: 36px;
   --spacing-unit: 4px;
+
+    --color-popover: #ffffff;
+  --shadow-popover: 0 4px 8px -2px rgb(16 24 20 / 0.08),
+                    0 12px 28px -6px rgb(16 24 20 / 0.16);
 }
 
 [data-theme='dark'] {
@@ -80,6 +84,10 @@
   /* ---------- Semántica financiera ---------- */
   --color-profit: #22c55e;
   --color-loss: #ef4444;
+
+    --color-popover: #252a27;
+  --shadow-popover: 0 4px 8px -2px rgb(0 0 0 / 0.45),
+                    0 16px 32px -6px rgb(0 0 0 / 0.6);
 }
 
 * {

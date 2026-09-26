@@ -143,7 +143,6 @@ export class PortfolioSummaryComponent implements OnDestroy {
   protected readonly gananciaTotal = computed(() => {
     const hist = this.reference()?.gananciaHistorica;
     const mes = this.gananciaMes();
-    console.log('hist', hist, 'mes', mes);
 
     if (hist == null && mes === null) return null;
     return (hist ?? 0);

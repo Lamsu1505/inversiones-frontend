@@ -1,0 +1,151 @@
+<div class="modal__backdrop" (click)="onBackdrop($event)"
+     (keydown.escape)="onEscape()" tabindex="-1">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="inv-titulo">
+
+    <header class="modal__header">
+      <div class="modal__title-block">
+        <p class="modal__eyebrow">{{ esEdicion() ? 'Editar inversión' : 'Nueva inversión' }}</p>
+        <h2 class="modal__name" id="inv-titulo">{{ titulo() }}</h2>
+      </div>
+      <button type="button" class="modal__close" aria-label="Cerrar"
+              (click)="cerrar.emit()">
+        <app-icon name="plus" [size]="18" />
+      </button>
+    </header>
+
+    <form class="modal__form" [formGroup]="form" (ngSubmit)="guardar()"
+          (input)="onAnyInput()">
+      <div class="modal__fields">
+
+        <div class="field">
+          <div class="field__label-row">
+            <label class="field__label" for="inv-nombre">Nombre</label>
+            <span class="field__counter">{{ nombreLength() }}/{{ textoMax }}</span>
+          </div>
+          <div class="field__wrap">
+            <input class="field__input field__input--plain" id="inv-nombre" type="text"
+                   [maxlength]="textoMax" formControlName="nombre"
+                   placeholder="Ej. Fiducuenta" />
+          </div>
+          @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+            <p class="field__error" role="alert">El nombre es obligatorio.</p>
+          }
+        </div>
+
+        <div class="field">
+          <div class="field__label-row">
+            <label class="field__label" for="inv-entidad">
+              Entidad <span class="field__optional">(Opcional)</span>
+            </label>
+            <span class="field__counter">{{ entidadLength() }}/{{ textoMax }}</span>
+          </div>
+          <div class="field__wrap">
+            <input class="field__input field__input--plain" id="inv-entidad" type="text"
+                   [maxlength]="textoMax" formControlName="entidad"
+                   placeholder="Ej. Bancolombia" />
+          </div>
+        </div>
+
+        <div class="modal__row">
+          <div class="field">
+            <label class="field__label" for="inv-tipo">Tipo</label>
+            <div class="field__wrap field__wrap--select">
+              <select class="field__select" id="inv-tipo" formControlName="tipo">
+                <option value="" disabled>
+                  {{ tiposRes.isLoading() ? 'Cargando…' : 'Elige un tipo' }}
+                </option>
+                @if (tiposRes.hasValue()) {
+                  @for (t of tiposRes.value(); track t.codigo) {
+                    <option [value]="t.codigo">{{ t.nombre }}</option>
+                  }
+                }
+              </select>
+              <app-icon class="field__chevron" name="arrow-down" [size]="14" />
+            </div>
+            @if (tiposRes.error()) {
+              <p class="field__error" role="alert">No se pudieron cargar los tipos.</p>
+            } @else if (form.controls.tipo.touched && form.controls.tipo.invalid) {
+              <p class="field__error" role="alert">Elige un tipo.</p>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="inv-moneda">Moneda</label>
+            <div class="field__wrap field__wrap--select">
+              <select class="field__select" id="inv-moneda" formControlName="moneda">
+                @for (m of monedas; track m) {
+                  <option [value]="m">{{ m }}</option>
+                }
+              </select>
+              @if (!esEdicion()) {
+                <app-icon class="field__chevron" name="arrow-down" [size]="14" />
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="inv-apertura">Fecha de apertura</label>
+          <div class="field__wrap">
+            <input class="field__input field__input--plain" id="inv-apertura" type="date"
+                   formControlName="fechaApertura" [max]="fechaMax()" />
+          </div>
+          @if (limiteApertura(); as limite) {
+            <p class="field__hint">
+              No puede ser posterior al {{ limite | dateCo }}, fecha del primer
+              registro o movimiento.
+            </p>
+          }
+        </div>
+
+        <div class="field">
+          <span class="field__label">Qué reporta la entidad</span>
+          <div class="toggles">
+            <label class="toggle" [class.toggle--locked]="bloqueoUnidad()">
+              <input type="checkbox" formControlName="rastreaValorUnidad" />
+              <span class="toggle__text">
+                <span class="toggle__title">Valor de unidad y unidades</span>
+                <span class="toggle__hint">
+                  @if (bloqueoUnidad()) {
+                    Ya hay registros con estos datos; no se puede desactivar.
+                  } @else {
+                    Fondos de inversión: sí. CDT: no.
+                  }
+                </span>
+              </span>
+            </label>
+
+            <label class="toggle" [class.toggle--locked]="bloqueoDisponible()">
+              <input type="checkbox" formControlName="rastreaSaldoDisponible" />
+              <span class="toggle__text">
+                <span class="toggle__title">Saldo disponible</span>
+                <span class="toggle__hint">
+                  @if (bloqueoDisponible()) {
+                    Ya hay registros con este dato; no se puede desactivar.
+                  } @else {
+                    Si la entidad distingue lo disponible del saldo total.
+                  }
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      @if (errorGuardar(); as mensaje) {
+        <p class="modal__save-error" role="alert">{{ mensaje }}</p>
+      }
+
+      <footer class="modal__footer">
+        <button type="button" class="btn btn--ghost" (click)="cerrar.emit()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn--primary" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando…' : (esEdicion() ? 'Guardar cambios' : 'Crear inversión') }}
+        </button>
+      </footer>
+
+    </form>
+  </div>
+</div>

@@ -20,6 +20,10 @@ export type IconName =
   | 'calculator'
   | 'total_investment'
   | 'total_profit'
+  | 'swap'
+  | 'edit'
+  | 'archive'
+  | 'trash'
   ;
 
 @Component({
