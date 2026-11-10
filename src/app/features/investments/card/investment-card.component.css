@@ -49,6 +49,7 @@
   gap: 8px;
   padding-top: 8px;
   border-top: 1px solid var(--color-border);
+  margin-top: auto;
 }
 
 .investment-card__updated {
@@ -385,6 +386,7 @@
   gap: 12px;
   padding-top: 15px;
   border-top: 1px solid var(--color-border);
+  margin-top: auto;
 }
 
 .investment-card__updated {

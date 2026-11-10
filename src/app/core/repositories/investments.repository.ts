@@ -6,9 +6,10 @@ import { DashboardFilter } from '../models/dashboard/dashboard-filter.model';
 import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
 import { InvestmentSummary } from '../models/investment/investment-summary.model';
 import { PortfolioReference } from '../models/portfolio-reference.model';
-import { DailyRecordInput } from '../models/investment/daily-record-form.model';
+import { DailyRecordFields, DailyRecordInput } from '../models/investment/daily-record-form.model';
 import { Movement, MovementInput } from '../models/investment/movement.model';
 import { EditConstraints, InvestmentInput, InvestmentTypeOption } from '../models/investment/investment-form.model';
+import { MonthlySummary } from '../models/investment/monthly-summary.model';
 
 export abstract class InvestmentsRepository {
   abstract list(): Observable<Investment[]>;
@@ -42,5 +43,9 @@ export abstract class InvestmentsRepository {
   abstract updateInvestment(id: number, input: InvestmentInput): Observable<Investment>;
   abstract changeInvestmentStatus(id: number, activa: boolean): Observable<Investment>;
   abstract editConstraints(id: number): Observable<EditConstraints>;
+  abstract monthlySummaries(investmentId: number): Observable<MonthlySummary[]>;
+  abstract movements(investmentId: number, from: string, to: string): Observable<Movement[]>;
+  abstract updateRecord(recordId: number, fields: DailyRecordFields): Observable<void>;
+  abstract deleteRecord(recordId: number): Observable<void>;
 }
 

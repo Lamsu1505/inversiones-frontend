@@ -8,9 +8,10 @@ import { DashboardSummary } from '../models/dashboard/dashboard-summary.model';
 import { InvestmentSummary } from '../models/investment/investment-summary.model';
 import { DailyRecordDetail, DailyStats } from '../models/investment/daily-record.model';
 import { PortfolioReference } from '../models/portfolio-reference.model';
-import { DailyRecordInput } from '../models/investment/daily-record-form.model';
+import { DailyRecordFields, DailyRecordInput } from '../models/investment/daily-record-form.model';
 import { Movement, MovementInput } from '../models/investment/movement.model';
 import { EditConstraints, InvestmentInput, InvestmentTypeOption } from '../models/investment/investment-form.model';
+import { MonthlySummary } from '../models/investment/monthly-summary.model';
 
 @Injectable()
 export class HttpInvestmentsRepository extends InvestmentsRepository {
@@ -23,18 +24,19 @@ export class HttpInvestmentsRepository extends InvestmentsRepository {
   }
 
   records(id: number, from: string, to: string): Observable<DailyStats[]> {
-    return throwError(() => new Error('records() aún no implementado en el backend real'));
-  }
-
-  saveRecords(
-    investmentId: number,
-    records: DailyRecordInput[]
-  ): Observable<DailyRecordDetail[]> {
-    return this.http.post<DailyRecordDetail[]>(
-      `${this.baseUrl}/investments/${investmentId}/records`,
-      records
+    return this.http.get<DailyStats[]>(
+      `${this.baseUrl}/investments/${id}/records`,
+      { params: { from, to } },
     );
   }
+
+  saveRecords(investmentId: number, records: DailyRecordInput[]): Observable<DailyRecordDetail[]> {
+  const body = records.map(({ investmentId: _id, ...resto }) => resto);
+  return this.http.post<DailyRecordDetail[]>(
+    `${this.baseUrl}/investments/${investmentId}/records`,
+    body,
+  );
+}
 
   dashboardSummary(): Observable<DashboardSummary> {
     return throwError(() => new Error('dashboardSummary() aún no implementado en el backend real'));
@@ -92,5 +94,24 @@ export class HttpInvestmentsRepository extends InvestmentsRepository {
 
   editConstraints(id: number): Observable<EditConstraints> {
     return this.http.get<EditConstraints>(`${this.baseUrl}/investments/${id}/edit-constraints`);
+  }
+
+  monthlySummaries(investmentId: number): Observable<MonthlySummary[]> {
+    return this.http.get<MonthlySummary[]>(
+      `${this.baseUrl}/investments/${investmentId}/monthly-summaries`);
+  }
+
+  movements(investmentId: number, from: string, to: string): Observable<Movement[]> {
+    return this.http.get<Movement[]>(
+      `${this.baseUrl}/investments/${investmentId}/movements`,
+      { params: { from, to } });
+  }
+
+  updateRecord(recordId: number, fields: DailyRecordFields): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/records/${recordId}`, fields);
+  }
+
+  deleteRecord(recordId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/records/${recordId}`);
   }
 }

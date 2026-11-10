@@ -1,0 +1,59 @@
+<header class="history__header">
+  <div class="history__title-block">
+    <h1 class="history__title">Histórico</h1>
+    @if (investment(); as inv) {
+      <p class="history__meta">
+        {{ metaTexto() }}
+        @if (!inv.activa) {
+          <span class="history__badge">Inactiva</span>
+        }
+      </p>
+    }
+  </div>
+
+  @if (hayInversiones()) {
+    <select class="history__select" aria-label="Inversión" (change)="onSeleccion($event)">
+      @if (activas().length > 0) {
+        <optgroup label="Activas">
+          @for (inv of activas(); track inv.id) {
+            <option [value]="inv.id" [selected]="inv.id === selectedId()">{{ inv.nombre }}</option>
+          }
+        </optgroup>
+      }
+      @if (inactivas().length > 0) {
+        <optgroup label="Inactivas">
+          @for (inv of inactivas(); track inv.id) {
+            <option [value]="inv.id" [selected]="inv.id === selectedId()">{{ inv.nombre }}</option>
+          }
+        </optgroup>
+      }
+    </select>
+  }
+</header>
+
+@if (investmentsRes.isLoading() && !investmentsRes.hasValue()) {
+  <p class="history__status">Cargando inversiones…</p>
+} @else if (errorCarga(); as mensaje) {
+  <div class="history__error" role="alert">
+    <app-icon name="info" [size]="20" />
+    <div class="history__error-body">
+      <p class="history__error-title">No se pudieron cargar tus inversiones</p>
+      <p class="history__error-detail">{{ mensaje }}</p>
+    </div>
+    <button type="button" class="history__retry" (click)="investmentsRes.reload()">
+      Reintentar
+    </button>
+  </div>
+} @else if (!hayInversiones()) {
+  <div class="history__empty">
+    <p>Todavía no tienes inversiones registradas.</p>
+    <a class="history__link" routerLink="/investments">Ir a Mis Inversiones</a>
+  </div>
+} @else if (noEncontrada()) {
+  <div class="history__empty">
+    <p>No existe una inversión con ese identificador.</p>
+    <p class="history__empty-hint">Elige una en el selector de arriba.</p>
+  </div>
+} @else if (investment(); as inv) {
+  <!-- Bloques 3 y 4: franja de meses y tabla -->
+}

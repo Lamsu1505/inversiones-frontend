@@ -139,8 +139,6 @@
   </div>
   }
 
-  <!-- <app-sparkline [values]="sparklineValues()" [tone]="sparklineTone()" /> -->
-
   <footer class="investment-card__footer">
 
     <span class="investment-card__date">
@@ -162,7 +160,7 @@
       </button>
       }
       
-      <button type="button" class="investment-card__btn">Histórico</button>
+      <a class="investment-card__btn" [routerLink]="['/history', investment().id]">Histórico</a>
     </div>
   </footer>
 

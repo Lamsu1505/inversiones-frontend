@@ -30,15 +30,12 @@
         class="sidebar__icon-btn"
         [attr.aria-pressed]="balancesHidden()"
         [attr.aria-label]="balancesHidden() ? 'Mostrar saldos' : 'Ocultar saldos'"
-        (click)="toggleBalancesVisibility()"
+        (click)="privacy.toggle()"
+        [attr.aria-pressed]="privacy.ocultarMontos()"
+        [attr.aria-label]="privacy.ocultarMontos() ? 'Mostrar saldos' : 'Ocultar saldos'"
       >
         <span aria-hidden="true">
-        @if(balancesHidden()){
-          <app-icon [name]="'eye-off'" [size]="20" />
-        }
-        @else {
-          <app-icon [name]="'eye'" [size]="20" />
-        }
+          <app-icon [name]="privacy.ocultarMontos() ? 'eye' : 'eye-off'" [size]="18" />
         </span>
       </button>
 

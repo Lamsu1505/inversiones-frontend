@@ -12,6 +12,17 @@ export function daysAgo(days: number, from: Date = new Date()): Date {
   return result;
 }
 
+/**
+ * La misma fecha, n meses atrás. Si ese día no existe en el mes destino
+ * (31 de mayo → 31 de febrero), usa el último día de ese mes.
+ */
+export function monthsAgo(n: number, desde: Date = new Date()): Date {
+  const destino = new Date(desde.getFullYear(), desde.getMonth() - n, 1);
+  const ultimoDia = new Date(destino.getFullYear(), destino.getMonth() + 1, 0).getDate();
+  destino.setDate(Math.min(desde.getDate(), ultimoDia));
+  return destino;
+}
+
 /** Días calendario completos desde una fecha ISO ('YYYY-MM-DD') hasta hoy. */
 export function daysSinceIso(isoDate: string): number {
   const [year, month, day] = isoDate.split('-').map(Number);

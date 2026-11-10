@@ -1,0 +1,145 @@
+/* Página Histórico. Encabezado y estados alineados con "Mis Inversiones". */
+
+/* ── Encabezado ── */
+
+.history__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 20px;
+}
+
+.history__title-block { min-width: 0; }
+
+.history__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.history__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+/* Mismo aspecto que la etiqueta "Inactiva" de las tarjetas. */
+.history__badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--color-surface-hover);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ── Selector de inversión (mismo estilo que "Ordenar por") ── */
+
+.history__select {
+  min-width: 240px;
+  max-width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.history__select:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* La lista desplegable nativa también respeta el tema (en Chrome). */
+.history__select optgroup,
+.history__select option {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+}
+
+/* ── Estados ── */
+
+.history__status {
+  padding: 32px;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.history__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-loss);
+  border-radius: var(--radius-lg);
+}
+
+.history__error app-icon { color: var(--color-loss); flex: 0 0 auto; }
+.history__error-body { flex: 1 1 auto; min-width: 0; }
+
+.history__error-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.history__error-detail {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.history__retry {
+  flex: 0 0 auto;
+  height: var(--row-height-compact);
+  padding: 0 14px;
+  background-color: var(--color-primary);
+  border: 0;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--color-on-primary);
+  cursor: pointer;
+}
+
+.history__empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.history__empty p { margin: 0; }
+
+.history__empty-hint {
+  margin-top: 4px !important;
+  font-size: 0.875rem;
+}
+
+.history__link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* ── Móvil: el selector baja y ocupa todo el ancho ──
+   767px es el mismo corte del Shell (sidebar → menú lateral),
+   así no se agrega un umbral nuevo. */
+@media (max-width: 767px) {
+  .history__select { flex: 1 1 100%; }
+}

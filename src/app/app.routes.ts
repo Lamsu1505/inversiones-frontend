@@ -16,6 +16,8 @@ export const routes: Routes = [
       { path: 'investments', loadComponent: () => import('./features/investments/investments/investments.component').then(m => m.InvestmentsComponent) },
       { path: '', redirectTo: 'investments', pathMatch: 'full' },
       { path: 'calculator', loadComponent: () => import('./features/calculator/calculator.component').then((m) => m.CalculatorComponent) },
+      { path: 'history', loadComponent: () => import('./features/history/history.component').then(m => m.HistoryComponent) },
+      { path: 'history/:id', loadComponent: () => import('./features/history/history.component').then(m => m.HistoryComponent) },
     ],
   },
 ];

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IconName, IconComponent } from '../../../shared/components/icon/icon.component';
 import { ThemeService } from '../../../core/services/theme.service';
+import { PrivacyService } from '../../../core/services/privacy.service';
 
 interface NavItem {
   label: string;
@@ -26,14 +27,12 @@ export class SidebarComponent {
     { label: 'Calculadora', route: '/calculator', icon: 'calculator' },
   ];
 
+  protected readonly privacy = inject(PrivacyService);
+  
   // Placeholder de "ocultar saldos" — sin efecto real todavía.
   protected readonly balancesHidden = signal(false);
 
   private readonly router = inject(Router);
-
-  protected toggleBalancesVisibility(): void {
-    this.balancesHidden.update((hidden) => !hidden);
-  }
 
   protected logout(): void {
     // TODO(auth): reemplazar por authService.logout() cuando exista
