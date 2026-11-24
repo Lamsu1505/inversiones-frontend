@@ -41,6 +41,8 @@ export class InvestmentCardComponent {
   }
 
   protected readonly isStale = computed(() => {
+    // Una inversión dada de baja ya no se registra: nunca está "atrasada".
+    if (!this.investment().activa) return false;
     const fecha = this.summary()?.fechaUltimoRegistro;
     if (!fecha) return false;
     return daysSinceIso(fecha) > 2;

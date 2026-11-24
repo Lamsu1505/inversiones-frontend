@@ -91,6 +91,14 @@ export class InvestmentsComponent {
     this.summariesRes.hasValue() ? this.summariesRes.value() : [],
   );
 
+  /**
+   * Activas SIN búsqueda ni pestaña de estado: la barra "Hoy" mide tu día
+   * completo, no lo que la grilla muestra en este momento.
+   */
+  protected readonly inversionesActivas = computed(() =>
+    this.investments().filter((i) => i.activa),
+  );
+
   protected readonly gananciaTotalMes = computed(() => {
     if (!this.summariesRes.hasValue()) return null;
 

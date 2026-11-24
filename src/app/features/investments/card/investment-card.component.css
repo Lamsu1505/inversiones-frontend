@@ -363,6 +363,10 @@
   color: var(--color-text-muted);
 }
 
+.investment-card__date--stale {
+  color: var(--color-loss);
+}
+
 .investment-card__today {
   margin-left: calc(var(--spacing-unit) * 2);
   font-weight: 700;

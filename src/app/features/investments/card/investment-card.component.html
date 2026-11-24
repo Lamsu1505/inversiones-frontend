@@ -141,8 +141,10 @@
 
   <footer class="investment-card__footer">
 
-    <span class="investment-card__date">
-      <app-icon name="history" [size]="14" />
+    <span class="investment-card__date"
+      [class.investment-card__date--stale]="isStale()"
+      [title]="isStale() ? 'Han pasado más de 2 días desde el último registro' : ''">
+      <app-icon [name]="isStale() ? 'info' : 'history'" [size]="14" />
       {{ summary()?.fechaUltimoRegistro | relativeDateCo }}
 
       @if (summary()?.gananciaHoy; as g) {
